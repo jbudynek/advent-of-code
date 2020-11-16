@@ -60,12 +60,17 @@ def function(ii, DBG = True):
 
 def test(cc=None, expected=None, DBG = False):
     start_millis = int(round(time.time() * 1000))
-    result = str(function(cc,DBG))
+    result = function(cc,DBG)
     stop_millis = int(round(time.time() * 1000))
+    result = str(result)
     expected = str(expected)
     flag = (result == expected)
-    print("*** "+str(cc) + " *** -> Result = "+str(result), " -> success = "+ str(flag) + " -> expected " + expected)    
+    if(expected=="None"):
+        print("*** "+str(cc) + " *** -> Result = "+str(result))    
+    else:
+        print("*** "+str(cc) + " *** -> Result = "+str(result), " -> success = "+ str(flag) + " -> expected " + expected)    
     print((stop_millis-start_millis),"ms",int((stop_millis-start_millis)/1000),"s",int((stop_millis-start_millis)/1000/60),"min")
+    return flag
 # 10 players; last marble is worth 1618 points: high score is 8317
 # 13 players; last marble is worth 7999 points: high score is 146373
 # 17 players; last marble is worth 1104 points: high score is 2764
@@ -90,6 +95,6 @@ def test(cc=None, expected=None, DBG = False):
 #puzzle_input = contents.splitlines()
 puzzle_input = "405 players; last marble is worth 71700 points"
 #f.close()
-ret = test(puzzle_input,0,False) # 
+ret = test(puzzle_input) # 
 print(ret)
 
