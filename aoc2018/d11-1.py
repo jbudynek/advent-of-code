@@ -20,24 +20,6 @@ def get_power_level(x,y,serial_number):
     power_level = power_level - 5
     return power_level
 
-
-def build_world(ii, DBG=True):
-    x = []
-    y = []
-    vx = []
-    vy = []
-    for line in ii:
-        if(DBG):print(line)
-        nbs = re.findall(r'[-\d]+', line)
-        nbs = np.asarray(nbs, dtype=np.int)
-        x.append(nbs[0])
-        y.append(nbs[1])
-        vx.append(nbs[2])
-        vy.append(nbs[3])
-        
-    if(DBG):print(x,y,vx,vy)
-    return(x,y,vx,vy)
-
 def display(x,y, values, DBG = True):
     
     s_out = str(values[x,y])+" "+str(values[x+1,y])+" "+str(values[x+2,y])+"\n"
