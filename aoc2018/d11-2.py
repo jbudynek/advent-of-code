@@ -87,4 +87,4 @@ def test(cc=None, expected=None, DBG = False):
 ret = function(3031, True) 
 print(ret)
 
-# (21, 76, 30)
+# (234, 108, 16, 160)
