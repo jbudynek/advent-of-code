@@ -181,13 +181,6 @@ def function(ii, DBG = True):
     print(len(vehicles))
     print_tracks_and_vehicles(tracks,vehicles,vehicles_id_to_v_and_count,False)
 
-    # take bigger bounding box to avoid off by one errors (ugly)
-    coords = tracks.keys()
-    x_min = min(coords, key = lambda t: t[0])[0]-10
-    x_max = max(coords, key = lambda t: t[0])[0]+10
-    y_min = min(coords, key = lambda t: t[1])[1]-10
-    y_max = max(coords, key = lambda t: t[1])[1]+10
-
     tick = 0
     # start tick
     # sort vehicles along y then x, iterate on them
