@@ -23,7 +23,7 @@ def boom(input_val, DBG = True):
 
 def boom2(input_val, DBG = True):
     ii = np.asarray(input_val, dtype=np.int)
-    product = [i * j for i in ii for j in ii if (i+j==2020) and i>j]
+    product = [i * j for i in ii for j in ii if i>j and (i+j==2020)]
     if DBG:print(product)
     return product[0]
 

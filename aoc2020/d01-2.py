@@ -10,6 +10,8 @@ import sys
 #from collections import Counter
 #from collections import deque
 import time
+import random
+from timeit import default_timer as timer
 
 def boom(input_val, DBG = True):
     ii = np.asarray(input_val, dtype=np.int)
@@ -27,9 +29,17 @@ def boom(input_val, DBG = True):
 def boom2(input_val, DBG = True):
     ii = np.asarray(input_val, dtype=np.int)
     if DBG:print(ii)
-    product = [i* j * k for i in ii for j in ii for k in ii if (i+j+k==2020) and i>j and j>k]
+    product = [i * j * k for i in ii for j in ii for k in ii if i>j and j>k and (i+j+k==2020)]
     if DBG:print(product)
     return product[0]
+
+# generator is more elegant but slower
+def boom3(input_val, DBG = True):
+    ii = np.asarray(input_val, dtype=np.int)
+    if DBG:print(ii)
+    product = next(i * j * k for i in ii for j in ii for k in ii if i>j and j>k and (i+j+k==2020))
+    if DBG:print(product)
+    return product
 
 def test(cc=None, expected=None, DBG = False):
     start_millis = int(round(time.time() * 1000))
@@ -63,11 +73,33 @@ puzzle_input = contents.splitlines()
 f.close()
 
 # nested loops
-ret = boom(puzzle_input, False) 
-print(ret)
+times = []
+for n in range(20):
+    random.shuffle(puzzle_input)
+    start = timer()
+    ret = boom(puzzle_input, False) 
+    end = timer()
+    times.append(end-start)
+print("loops",sum(times)/len(times), ret)
 
 # list comprehension 
-ret = boom2(puzzle_input, False) 
-print(ret)
+times = []
+for n in range(20):
+    random.shuffle(puzzle_input)
+    start = timer()
+    ret = boom2(puzzle_input, False) 
+    end = timer()
+    times.append(end-start)
+print("comp",sum(times)/len(times), ret)
+
+# generator
+times = []
+for n in range(20):
+    random.shuffle(puzzle_input)
+    start = timer()
+    ret = boom3(puzzle_input, False) 
+    end = timer()
+    times.append(end-start)
+print("gen",sum(times)/len(times), ret)
 
 # part 2 = 13891280
