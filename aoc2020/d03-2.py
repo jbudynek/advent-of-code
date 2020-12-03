@@ -11,6 +11,43 @@ import sys
 #from collections import deque
 import time
 
+
+CURSOR_UP_ONE = '\x1b[1A'
+ERASE_LINE = '\x1b[2K'
+
+def delete_last_lines(n=1):
+    for _ in range(n):
+        print(CURSOR_UP_ONE + ERASE_LINE + CURSOR_UP_ONE)
+
+def print_field(xyids, x,y , DBG=True):
+
+    coords = xyids.keys()
+    if(DBG): print(xyids)
+    x_min = min(coords, key = lambda t: t[0])[0]-1
+    x_max = max(coords, key = lambda t: t[0])[0]+1
+    y_min = min(coords, key = lambda t: t[1])[1]-1
+    y_max = max(coords, key = lambda t: t[1])[1]+1
+    
+    if(DBG): print(x_min,x_max,y_min,y_max)
+
+    delete_last_lines(21)
+
+    for yy in range(y-10,y+11):
+#    for yy in range(y_min,y_max+1):
+        ss = ""
+        for xx in range(x_min,x_max+1):
+            if (xx==x) and (yy==y) and  (xx,yy) in xyids:
+                 ss +='💥'
+            elif (xx==x) and (yy==y):
+                 ss +='🏂'
+            elif (xx,yy) in xyids:
+                ##########
+                ss += '🎄'
+            else:
+                ss += "  "
+        print(ss)
+    time.sleep(0.3)
+
 def create_world(ccc, DBG=True):
     field = {}
     x=-1
@@ -28,11 +65,12 @@ def create_world(ccc, DBG=True):
     if DBG:print(field)    
     return (field)
     
-def trees(x_max,y_max,world,dx,dy):
+def trees(x_max,y_max,world,dx,dy,DBG=False):
     count_trees = 0
     cur_x=0
     cur_y=0
     while cur_y<y_max:
+        if(DBG):print_field(world,cur_x,cur_y,False)
         if (cur_x,cur_y) in world:
             count_trees = count_trees + 1
         cur_x = (cur_x + dx) % x_max
@@ -47,7 +85,7 @@ def boom(input_val, DBG = True):
 
     product = 1
     for (dx,dy) in [(1,1),(3,1),(5,1),(7,1),(1,2)]:
-        product = product * trees(x_max,y_max,world,dx,dy)
+        product = product * trees(x_max,y_max,world,dx,dy,DBG)
 
     return product
 
@@ -78,7 +116,7 @@ t1="""..##.......
 #...##....#
 .#..#...#.#"""
 tt1 = t1.splitlines()
-test(tt1,336,True)
+#test(tt1,336,True)
 #sys.exit()
 
 INPUT_FILE="input-d03.txt"
@@ -87,7 +125,8 @@ contents = f.read()
 puzzle_input = contents.splitlines()
 f.close()
 
-ret = boom(puzzle_input, False) 
+# set DBG to True for animation
+ret = boom(puzzle_input, DBG = True) 
 print(ret)
 
 # part 2 = 5140884672
