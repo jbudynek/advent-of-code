@@ -92,4 +92,4 @@ f.close()
 ret = boom(puzzle_input, False) 
 print(ret)
 
-# part 1 = 
+# part 1 = 247
