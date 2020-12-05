@@ -11,8 +11,20 @@ import sys
 #from collections import deque
 import time
 
-
+# turn seat code into binary numbers
 def boom(input_val, DBG = True):
+    seat = input_val
+
+    row_bin = int(seat[0:7].replace('F','0').replace('B','1'),2)
+    col_bin = int(seat[7:10].replace('R','1').replace('L','0'),2)
+   
+    seat_id = row_bin*8+col_bin
+    if DBG: print(seat,row_bin,col_bin,seat_id)
+
+    return (row_bin,col_bin,seat_id)
+
+# also works but too literal 
+def boom_0(input_val, DBG = True):
     seat = input_val
     min_row=0
     max_row=127
