@@ -3,7 +3,7 @@
 Usual disclaimer: the code gets the job done. It's raw and mostly inelegant!
 
 ## 2020
-Stay tuned...
+AOC 2020 ongoing ... in Python.
 
 ## 2019
 Completed AOC 2019 in Python! It was my first participation.
