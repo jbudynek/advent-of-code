@@ -18,8 +18,7 @@ def parse_instruction(instruction, DBG=True):
     return (action, value)
 
 
-def process_instruction(z, direction, waypoint, action, value, DBG):
-    new_direction = direction
+def process_instruction(z, waypoint, action, value, DBG):
     new_z = z
     new_waypoint = waypoint
     # rotate the waypoint
@@ -41,29 +40,27 @@ def process_instruction(z, direction, waypoint, action, value, DBG):
         new_waypoint = waypoint - 1 * value
     elif (action == "E"):
         new_waypoint = waypoint + 1 * value
-    return(new_z, new_direction, new_waypoint)
+    return(new_z, new_waypoint)
 
 
 def boom(input_val, DBG=True):
 
     cur_z = complex(0, 0)
-    cur_direction = complex(1, 0)
     cur_waypoint = 10 + 1j
 
     for instruction in input_val:
         if DBG:
-            print(cur_z, cur_direction, cur_waypoint)
+            print(cur_z, cur_waypoint)
         (action, value) = parse_instruction(instruction, DBG)
         if DBG:
             print(action, value)
-        (new_z, new_direction, new_waypoint) = process_instruction(
-            cur_z, cur_direction, cur_waypoint, action, value, DBG)
+        (new_z, new_waypoint) = process_instruction(
+            cur_z, cur_waypoint, action, value, DBG)
         if DBG:
-            print(new_z, new_direction, new_waypoint)
+            print(new_z, new_waypoint)
 
         #aa = input()
         cur_z = new_z
-        cur_direction = new_direction
         cur_waypoint = new_waypoint
 
     manhattan = int(abs(cur_z.real)+abs(cur_z.imag))
