@@ -153,4 +153,4 @@ f.close()
 ret = boom(puzzle_input, False) 
 print(ret)
 
-# part 2 = 146 too high
+# part 2 = 145
