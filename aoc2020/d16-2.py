@@ -140,7 +140,7 @@ def boom(input_val, DBG=True):
     # find the ones that start with "departure" and multiply
     ret = 1
     for (r, fields) in rule_to_fields.items():
-        (name, l0, h0, l1, h1) = r
+        name = r[0]
         field = fields[0]
         if DBG:
             print("rule ", r)
