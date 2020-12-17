@@ -63,7 +63,7 @@ def get_invalidity(t, rules, DBG=True):
 def boom(input_val, DBG=True):
 
     rules = []
-    #my_ticket = []
+    #my_ticket = [] unused in part 1
     nearby_tickets = []
     ppp = 0
     idx = 0
@@ -76,8 +76,7 @@ def boom(input_val, DBG=True):
         if (ppp == 0):
             rules.append(parse_rule(ii, DBG))
         elif (ppp == 1):
-            #my_ticket = 
-            parse_ticket(ii, DBG)
+            _ = parse_ticket(ii, DBG)
         elif (ppp == 2):
             nearby_tickets.append(parse_ticket(ii, DBG))
         idx = idx + 1
