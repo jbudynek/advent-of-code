@@ -18,6 +18,8 @@ from timeit import default_timer as timer
 
 import numpy as np
 
+# this gives the answer for part 1 and part 2
+
 # list all allergens
 # one by one, match them like this:
 # for each food that has this allergen
