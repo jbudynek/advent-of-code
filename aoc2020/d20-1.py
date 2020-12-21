@@ -9,11 +9,11 @@
 # from math import log
 import copy
 import operator
+import pickle
 import re
 import string
 import sys
 import time
-import pickle
 from itertools import permutations, product
 from timeit import default_timer as timer
 
