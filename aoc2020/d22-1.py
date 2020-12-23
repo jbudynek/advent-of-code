@@ -19,6 +19,7 @@ from timeit import default_timer as timer
 import numpy as np
 
 # simple implementation of rules using a queue implemented by deque
+# handles arbitrary number of players... (turned out to be useless)
 
 
 def parse_cards(input_val, DBG):
