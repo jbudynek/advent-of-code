@@ -138,4 +138,4 @@ print_time(t_start, t_end)
 
 print(ret)
 
-# part 2 = 4135
+# part 1 = 4126980
