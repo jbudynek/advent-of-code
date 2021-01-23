@@ -1,6 +1,9 @@
 # HOWTO CPC
 
-## ARNOLD: Amstrad CPC emulator
+## Caprice Forever: Amstrad CPC emulator for Windows (includes Sorcery disk)
+https://www.cpc-power.com/cpcarchives/index.php?page=articles&num=73
+
+## ARNOLD: Amstrad CPC emulator for Max and Windows
 https://www.cpcwiki.eu/index.php/Arnold_(Emulator)
 
 ## IDSK: to deal with "floppy disks"
@@ -29,3 +32,6 @@ Extract file from disk
 ./iDSK aoc2020.dsk -b AOC01.BAS > AOC01.BAS
 ./iDSK aoc2020.dsk -b AOC01-2.BAS > AOC01-2.BAS 
 ```
+
+## CPC Emulator in Browser - with games
+https://www.retrovm.com/
