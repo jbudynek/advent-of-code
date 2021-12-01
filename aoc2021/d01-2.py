@@ -8,9 +8,11 @@ import numpy as np
 
 def boom(input_val, DBG=True):
     depth = np.asarray(input_val, dtype=int)
-    depth = np.append(depth, np.NaN)
-    depth_2 = np.roll(depth, 1)
-    delta = np.subtract(depth, depth_2)
+    depth = np.append(depth, [np.NaN, np.NaN, np.NaN])
+    depth_sum_window_3 = np.add(
+        np.add(depth, np.roll(depth, 1)), np.roll(depth, 2))
+    depth_sw3_roll_1 = np.roll(depth_sum_window_3, 1)
+    delta = np.subtract(depth_sum_window_3, depth_sw3_roll_1)
     ret = np.sum(delta > 0)
     return ret
 
@@ -73,4 +75,4 @@ print_time(t_start, t_end)
 
 print(ret)
 
-# OK 1387
+# OK 1362
