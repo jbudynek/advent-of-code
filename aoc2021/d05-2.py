@@ -39,24 +39,20 @@ def parse_line(ll, DBG=True):
     return (origin, dest)
 
 
-def fill_world(w, o, d, DBG=True):
-    # find director vector, and move from origin to destination
-    vd = np.subtract(d, o)
+def fill_world(world, origin, destination, DBG=True):
+    # find normalized director vector, and move from origin to destination
+    vd = np.subtract(destination, origin)
     # horizontal / vertical / diagonal
-    vdn = np.sign(vd)
-    cur = np.copy(o)
-    while (np.not_equal(cur, d)).any():
-        if not (cur[0], cur[1]) in w:
-            w[(cur[0], cur[1])] = 0
-        w[(cur[0], cur[1])] += 1
-        cur = np.add(cur, vdn)
+    vd_n = np.sign(vd)
+    cur_pos = np.copy(origin)
+    while (np.not_equal(cur_pos, destination)).any():
+        world[(cur_pos[0], cur_pos[1])] = world.get((cur_pos[0], cur_pos[1]), 0) + 1
+        cur_pos = np.add(cur_pos, vd_n)
     # dont forget the last one
-    if not (cur[0], cur[1]) in w:
-        w[(cur[0], cur[1])] = 0
-    w[(cur[0], cur[1])] += 1
+    world[(cur_pos[0], cur_pos[1])] = world.get((cur_pos[0], cur_pos[1]), 0) + 1
     if DBG:
-        print_field(w)
-    return w
+        print_field(world)
+    return world
 
 
 def boom(input_val, DBG=True):

@@ -6,6 +6,7 @@ import numpy as np
 # Helpers
 ##########
 
+
 def print_field(xyids, DBG=True):
     coords = xyids.keys()
     if(DBG):
@@ -30,47 +31,48 @@ def print_field(xyids, DBG=True):
 # Main function
 ##########
 
+
 def parse_line(ll, DBG=True):
     ll = ll.split(" -> ")
     origin = np.asarray(ll[0] .split(","), dtype=int)
     dest = np.asarray(ll[1] .split(","), dtype=int)
-    return (origin,dest)
+    return (origin, dest)
 
-def fill_world(w,o,d,DBG=True):
-    # find director vector, and move from origin to destination
-    vd = np.subtract(d,o)
+
+def fill_world(world, origin, destination, DBG=True):
+    # find normalized director vector, and move from origin to destination
+    vd = np.subtract(destination, origin)
     # only horizontal / vertical
-    if (np.not_equal(vd,[0,0])).all():
+    if (np.not_equal(vd, [0, 0])).all():
         return
-    vdn = np.sign(vd)
-    cur = np.copy(o)
-    while (np.not_equal(cur,d)).any():
-        if not (cur[0],cur[1]) in w:
-             w[(cur[0],cur[1])] = 0
-        w[(cur[0],cur[1])] += 1
-        cur = np.add(cur,vdn)
+    vd_n = np.sign(vd)
+    cur_pos = np.copy(origin)
+    while (np.not_equal(cur_pos, destination)).any():
+        world[(cur_pos[0], cur_pos[1])] = world.get(
+            (cur_pos[0], cur_pos[1]), 0) + 1
+        cur_pos = np.add(cur_pos, vd_n)
     # dont forget the last one
-    if not (cur[0],cur[1]) in w:
-            w[(cur[0],cur[1])] = 0
-    w[(cur[0],cur[1])] += 1
-    if DBG: print_field(w)
-    return w
+    world[(cur_pos[0], cur_pos[1])] = world.get(
+        (cur_pos[0], cur_pos[1]), 0) + 1
+    if DBG:
+        print_field(world)
+    return world
 
 
 def boom(input_val, DBG=True):
-    #w orld=dict of (xy)
+    # w orld=dict of (xy)
     world = {}
     # loop on lines
     for ii in input_val:
         # parse line
-        (origin, destination) = parse_line(ii,DBG)
+        (origin, destination) = parse_line(ii, DBG)
         # fill matrix (horizontal/vertical only)
-        fill_world(world,origin,destination,DBG)
+        fill_world(world, origin, destination, DBG)
     # iterate dict count where >1
     ret = 0
-    for k,v in world.items():
-        if v>1:
-            ret +=1
+    for k, v in world.items():
+        if v > 1:
+            ret += 1
     return ret
 
 # Testing and timing
