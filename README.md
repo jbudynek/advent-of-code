@@ -1,4 +1,4 @@
-# Advent of code https://adventofcode.com/
+# Advent of code
 
 Usual disclaimer: the code gets the job done. It's raw and mostly inelegant!
 
@@ -14,3 +14,5 @@ Mostly within Jupyter Notebooks at first, but in the end, Python scripts are eas
 
 ## 2018-2017-2016-2015
 Just for practice, in Python.
+
+https://adventofcode.com/
