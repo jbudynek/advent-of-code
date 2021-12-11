@@ -143,5 +143,5 @@ t_end = timer()
 print_time(t_start, t_end)
 print(ret)
 
-# PART 1 OK =
-# PART 2 OK =
+# PART 1 OK = 268845
+# PART 2 OK = 4038824534
