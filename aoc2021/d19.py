@@ -101,8 +101,8 @@ def get_all_rot_dir():
 
 
 def apply_rot_dir(scan, rot_dir):
-    # first part = permutations of xyz
-    # second pars = +/- signs in front of x y z
+    # first part = permutations of x y z
+    # second part = +/- signs in front of x y z
     # 6*8 = 48 possibilities, there must be repetitions
     scan.rot_dir = rot_dir
 
@@ -218,7 +218,7 @@ def compute_known_scanners(input_val):
                 continue
             test_scanner = apply_rot_dir(
                 copy.deepcopy(current_scanner), cur_rot_dir)
-            for ks in known_scanners:  # TODO SWITCH WITH OTHER LOOP
+            for ks in known_scanners:  # SWITCH WITH PREVIOUS LOOP ?
                 if found:
                     continue
                 mm, xyz = match(ks, test_scanner)
