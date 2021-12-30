@@ -1,7 +1,6 @@
 # misc
 .DS_Store
 
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -131,3 +130,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# vscode stuff
+*/.vscode/settings.json
+
+# more
+*/obj
+*/sk.py
