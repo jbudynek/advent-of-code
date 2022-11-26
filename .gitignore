@@ -132,7 +132,8 @@ dmypy.json
 .pyre/
 
 # vscode stuff
-*/.vscode/settings.json
+*/.vscode/
+.vscode/
 
 # more
 */obj
