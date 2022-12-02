@@ -5,17 +5,17 @@ from boilerplate import *
 def get_cals_by_elf(input_val):
     input_val.append("")
 
-    max_cals = []
+    all_cals = []
     cur_cal = 0
 
     for line in input_val:
         if line == "":
-            max_cals.append(cur_cal)
+            all_cals.append(cur_cal)
             cur_cal = 0
         else:
             cur_cal += int(line)
-    s_cals = sorted(max_cals, reverse=True)
-    return s_cals
+    sorted_cals = sorted(all_cals, reverse=True)
+    return sorted_cals
 
 
 def boom_part1(input_val, DBG=True):
