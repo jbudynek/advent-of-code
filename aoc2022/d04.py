@@ -23,12 +23,12 @@ def overlaps_partially(line):
 
 
 def boom_part1(input_val, DBG=True):
-    over = [1 if overlaps_totally(line) else 0 for line in input_val]
+    over = [overlaps_totally(line) for line in input_val]
     return sum(over)
 
 
 def boom_part2(input_val, DBG=True):
-    over = [1 if overlaps_partially(line) else 0 for line in input_val]
+    over = [overlaps_partially(line) for line in input_val]
     return sum(over)
 
 
