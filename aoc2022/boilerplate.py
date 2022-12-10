@@ -1,9 +1,11 @@
-from timeit import default_timer as timer
-import pickle
 import os
+import pickle
+from timeit import default_timer as timer
 
 # Constants
 ##########
+
+CLEAR_SCREEN = "\x1b[2J"
 
 CURSOR_UP_ONE = "\x1b[1A"
 ERASE_LINE = "\x1b[2K"
@@ -62,7 +64,7 @@ def output_test(cc, t_start, t_end, result, expected):
     expected = str(expected)
     flag = result == expected
     sflag = ""
-    if flag == True:
+    if flag:
         sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
         sflag = RED_FG + str(flag) + DEFAULT_FG
