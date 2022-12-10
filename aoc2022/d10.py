@@ -3,6 +3,7 @@ from boilerplate import read_input_file, run_func, test_func
 
 
 def draw(x, current_crt_line, current_crt_index):
+    # this could be much simpler by using cycle index instead of clumsy crt_index
     if abs(x - current_crt_index) <= 1:
         current_crt_line += "#"
     else:
@@ -18,6 +19,7 @@ def draw(x, current_crt_line, current_crt_index):
 
 
 def increment_cycle(current_crt_line, current_crt_index, sum_strength, cycle, x):
+    # this could be return values in the same order as inputs...
     cycle += 1
     current_crt_line, current_crt_index = draw(x, current_crt_line, current_crt_index)
     if (cycle - 20) % 40 == 0:
