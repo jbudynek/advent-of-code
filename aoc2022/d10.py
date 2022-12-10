@@ -19,7 +19,7 @@ def draw(x, current_crt_line, current_crt_index):
 
 
 def increment_cycle(current_crt_line, current_crt_index, sum_strength, cycle, x):
-    # this could be return values in the same order as inputs...
+    # this could return values in the same order as inputs...
     cycle += 1
     current_crt_line, current_crt_index = draw(x, current_crt_line, current_crt_index)
     if (cycle - 20) % 40 == 0:
