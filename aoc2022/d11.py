@@ -7,6 +7,10 @@ from math import prod
 from boilerplate import read_input_file, run_func, test_func
 
 
+def get_first_int(line):
+    return list(map(int, re.findall(r"-?\d+", line)))[0]
+
+
 class Monkey:
     def __init__(self, id, items, operation, divisor, test_true, test_false):
         self.id = id
@@ -18,16 +22,19 @@ class Monkey:
         self.count_inspections = 0
 
         if "+" in self.operation:
-            v = list(map(int, re.findall(r"-?\d+", self.operation)))[0]
+            v = get_first_int(self.operation)
             self.f = self.add
             self.v = v
         elif "old * old" in self.operation:
             self.f = self.sq
             self.v = 0
         elif "*" in self.operation:
-            v = list(map(int, re.findall(r"-?\d+", self.operation)))[0]
+            v = get_first_int(self.operation)
             self.f = self.mul
             self.v = v
+        else:
+            print("parsing error")
+            sys.exit()
 
     def add(self, x):
         return x + self.v
@@ -58,19 +65,19 @@ def parse_monkeys(input_val):
     test_true = 0
     test_false = 0
     for line in input_val:
-        if line.startswith("Monkey"):
-            id = list(map(int, re.findall(r"-?\d+", line)))[0]
-        elif line.startswith("  Starting"):
+        if "Monkey" in line:
+            id = get_first_int(line)
+        elif "Starting" in line:
             items = deque(map(int, re.findall(r"-?\d+", line)))
-        elif line.startswith("  Operation"):
+        elif "Operation" in line:
             operation = line.split("=")[1]
-        elif line.startswith("  Test"):
-            divisor = list(map(int, re.findall(r"-?\d+", line)))[0]
+        elif "Test" in line:
+            divisor = get_first_int(line)
             all_divisors.append(divisor)
-        elif line.startswith("    If true"):
-            test_true = list(map(int, re.findall(r"-?\d+", line)))[0]
-        elif line.startswith("    If false"):
-            test_false = list(map(int, re.findall(r"-?\d+", line)))[0]
+        elif "If true" in line:
+            test_true = get_first_int(line)
+        elif "If false" in line:
+            test_false = get_first_int(line)
         elif line == "":
             m = Monkey(id, items, operation, divisor, test_true, test_false)
             monkeys[id] = m
@@ -93,7 +100,7 @@ def parse_monkeys(input_val):
 def boom_part1(input_val, DBG=True):
     monkeys, _ = parse_monkeys(input_val)
     nbm = len(monkeys.values())
-    for i in range(20):
+    for _ in range(20):
         for i in range(nbm):
             m = monkeys[i]
             while len(m.items) > 0:
@@ -116,7 +123,7 @@ def boom_part2(input_val, DBG=True):
     monkeys, modulo = parse_monkeys(input_val)
     nbm = len(monkeys.values())
 
-    for i in range(10000):
+    for _ in range(10000):
         for i in range(nbm):
             m = monkeys[i]
             while len(m.items) > 0:
