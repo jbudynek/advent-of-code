@@ -6,9 +6,6 @@ from math import prod
 
 from boilerplate import read_input_file, run_func, test_func
 
-# Main function
-##########
-
 
 class Monkey:
     def __init__(self, id, items, operation, divisor, test_true, test_false):
@@ -54,13 +51,6 @@ def parse_monkeys(input_val):
 
     all_divisors = []
 
-    # Monkey 1:
-    #  Starting items: 54, 65, 75, 74
-    #  Operation: new = old + 6
-    #  Test: divisible by 19
-    #    If true: throw to monkey 2
-    #    If false: throw to monkey 0
-
     id = 0
     items = deque()
     operation = ""
@@ -97,15 +87,13 @@ def parse_monkeys(input_val):
     m = Monkey(id, items, operation, divisor, test_true, test_false)
     monkeys[id] = m
 
-    return monkeys, all_divisors
+    return monkeys, prod(all_divisors)
 
 
 def boom_part1(input_val, DBG=True):
     monkeys, _ = parse_monkeys(input_val)
     nbm = len(monkeys.values())
     for i in range(20):
-        if i % 100 == 0:
-            print(i)
         for i in range(nbm):
             m = monkeys[i]
             while len(m.items) > 0:
@@ -125,8 +113,7 @@ def boom_part1(input_val, DBG=True):
 
 
 def boom_part2(input_val, DBG=True):
-    monkeys, all_divisors = parse_monkeys(input_val)
-    modulo = prod(all_divisors)
+    monkeys, modulo = parse_monkeys(input_val)
     nbm = len(monkeys.values())
 
     for i in range(10000):
