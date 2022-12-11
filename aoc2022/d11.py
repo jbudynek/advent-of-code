@@ -21,8 +21,9 @@ class Monkey:
         self.test_false = test_false
         self.count_inspections = 0
 
-        # parse operation and wire to function
-        # we could use "eval", it would be simpler but slower
+        # parse operation and wire to appropriate function
+        # v holds the value to add or multiply with
+        # we could use "eval", it would be simpler but a bit slower
         if "+" in self.operation:
             v = get_first_int(self.operation)
             self.f = self.add
@@ -69,7 +70,7 @@ def parse_monkeys(input_val):
     for line in input_val:
         if "Monkey" in line:
             id = get_first_int(line)
-        elif "Starting" in line:
+        elif "Starting" in line:  # dequeue is overkill as there are only a few items
             items = deque(map(int, re.findall(r"-?\d+", line)))
         elif "Operation" in line:
             operation = line.split("=")[1]
@@ -96,6 +97,8 @@ def parse_monkeys(input_val):
     m = Monkey(id, items, operation, divisor, test_true, test_false)
     monkeys[id] = m
 
+    # we should use least common multiple instead of product,
+    # but it works! because all divisors are prime.
     return monkeys, prod(all_divisors)
 
 
