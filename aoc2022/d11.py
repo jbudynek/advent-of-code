@@ -21,6 +21,8 @@ class Monkey:
         self.test_false = test_false
         self.count_inspections = 0
 
+        # parse operation and wire to function
+        # we could use "eval", it would be simpler but slower
         if "+" in self.operation:
             v = get_first_int(self.operation)
             self.f = self.add
@@ -97,17 +99,19 @@ def parse_monkeys(input_val):
     return monkeys, prod(all_divisors)
 
 
-def boom_part1(input_val, DBG=True):
-    monkeys, _ = parse_monkeys(input_val)
+def run_rounds(monkeys, nb_rounds, div, modulo):
     nbm = len(monkeys.values())
-    for _ in range(20):
+    for _ in range(nb_rounds):
         for i in range(nbm):
             m = monkeys[i]
             while len(m.items) > 0:
                 item = m.items.popleft()
                 item = m.compute_operation(item)
                 m.count_inspections += 1
-                item = item // 3
+                if div:  # for part 1
+                    item = item // 3
+                else:  # for part 2
+                    item = item % modulo
                 if m.test(item):
                     monkeys[m.test_true].items.append(item)
                 else:
@@ -117,29 +121,16 @@ def boom_part1(input_val, DBG=True):
         nb_inspections.append(m.count_inspections)
 
     return prod(sorted(nb_inspections)[-2:])
+
+
+def boom_part1(input_val, DBG=True):
+    monkeys, _ = parse_monkeys(input_val)
+    return run_rounds(monkeys, 20, True, 0)
 
 
 def boom_part2(input_val, DBG=True):
     monkeys, modulo = parse_monkeys(input_val)
-    nbm = len(monkeys.values())
-
-    for _ in range(10000):
-        for i in range(nbm):
-            m = monkeys[i]
-            while len(m.items) > 0:
-                item = m.items.popleft()
-                item = m.compute_operation(item) % modulo
-                m.count_inspections += 1
-                if m.test(item):
-                    monkeys[m.test_true].items.append(item)
-                else:
-                    monkeys[m.test_false].items.append(item)
-
-    nb_inspections = []
-    for m in monkeys.values():
-        nb_inspections.append(m.count_inspections)
-
-    return prod(sorted(nb_inspections)[-2:])
+    return run_rounds(monkeys, 10000, False, modulo)
 
 
 # Test cases
