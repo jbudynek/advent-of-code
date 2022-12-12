@@ -76,7 +76,6 @@ abdefghi"""
 tt1 = t1.splitlines()
 test_func(boom_part1, tt1, 31, True)
 test_func(boom_part2, tt1, 29, True)
-# sys.exit()
 
 # Real data
 ##########
@@ -91,5 +90,5 @@ run_func(boom_part1, puzzle_input, DBG=False)
 
 run_func(boom_part2, puzzle_input, DBG=False)
 
-# PART 1 OK =
-# PART 2 OK =
+# PART 1 OK = 504
+# PART 2 OK = 500
