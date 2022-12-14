@@ -138,3 +138,6 @@ dmypy.json
 # more
 */obj
 */sk.py
+tmp/
+*.gif
+*anim*
