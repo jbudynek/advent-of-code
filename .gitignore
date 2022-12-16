@@ -141,3 +141,4 @@ dmypy.json
 tmp/
 *.gif
 *anim*
+*.png
