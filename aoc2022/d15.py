@@ -4,6 +4,10 @@ import re
 from boilerplate import read_input_file, run_func, test_func
 from shapely.geometry import LineString, Polygon
 
+# kind of ugly solution using shapely
+# lucky that it works, as shapely uses polygons with real coordinates, not integers
+# the part 2 generates polygons with holes, we find the smallest hole
+
 
 def boom_part1(input_val, DBG=True):
 
@@ -80,14 +84,15 @@ def boom_part2(input_val, DBG=True):
 
     # test data
     square_to_search_into_1 = Polygon([(0, 0), (20, 0), (20, 20), (0, 20)])  # test
-    answer_inside_1 = polygon_union.intersection(square_to_search_into_1)
+    find_the_answer_within_1 = polygon_union.intersection(square_to_search_into_1)
 
-    min_ar_1 = answer_inside_1.area
+    min_ar_1 = find_the_answer_within_1.area
     small_pol_1 = None
     xx_1 = 0
     yy_1 = 0
-    if len(answer_inside_1.interiors) > 0:
-        for pol in answer_inside_1.interiors:
+    # find the smallest hole, if any
+    if len(find_the_answer_within_1.interiors) > 0:
+        for pol in find_the_answer_within_1.interiors:
             p = Polygon(pol)
             if p.area < min_ar_1:
                 min_ar_1 = p.area
@@ -101,11 +106,12 @@ def boom_part2(input_val, DBG=True):
     square_to_search_into_2 = Polygon(
         [(0, 0), (4000000, 0), (4000000, 4000000), (0, 4000000)]
     )  # real
-    answer_inside_2 = polygon_union.intersection(square_to_search_into_2)
+    find_the_answer_within_2 = polygon_union.intersection(square_to_search_into_2)
 
-    min_ar_2 = answer_inside_2.area
+    min_ar_2 = find_the_answer_within_2.area
     small_pol_2 = None
-    for pol in answer_inside_2.interiors:
+    # find the smallest hole
+    for pol in find_the_answer_within_2.interiors:
         p = Polygon(pol)
         if p.area < min_ar_2:
             min_ar_2 = p.area
