@@ -96,7 +96,8 @@ def test_func(func, cc=None, expected=None, DBG=False):
 
 def run_func(func, puzzle_input, DBG=False):
     t_start = timer()
-    ret = func(puzzle_input, DBG=False)
+    ret = func(puzzle_input, DBG)
     t_end = timer()
     print_time(t_start, t_end)
     print(ret)
+    return ret
