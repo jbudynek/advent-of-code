@@ -140,5 +140,4 @@ dmypy.json
 */sk.py
 tmp/
 *.gif
-*anim*
 *.png
