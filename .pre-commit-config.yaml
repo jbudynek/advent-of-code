@@ -31,3 +31,16 @@ repos:
       - id: end-of-file-fixer
       - id: check-added-large-files
       - id: detect-private-key
+# Remove output from Jupyter notebooks
+  - repo: https://github.com/aflc/pre-commit-jupyter
+    rev: v1.2.1
+    hooks:
+      - id: jupyter-notebook-cleanup
+        args: ['--remove-kernel-metadata']
+# markdown
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.10.0
+    hooks:
+      - id: markdownlint-cli2
+        args:
+          - --fix
