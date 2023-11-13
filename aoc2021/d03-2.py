@@ -1,21 +1,21 @@
 # coding: utf-8
-import numpy as np
-import sys
 from timeit import default_timer as timer
+
+import numpy as np
 
 
 def get_mcb(candidates, k):
     nb_0 = 0
     nb_1 = 1
     for ll in candidates:
-        if ll[k] == '0':
+        if ll[k] == "0":
             nb_0 += 1
-        if ll[k] == '1':
+        if ll[k] == "1":
             nb_1 += 1
     if nb_0 < nb_1:
-        return '1'
+        return "1"
     else:
-        return '0'
+        return "0"
 
 
 def filter_candidates(candidates, start_mcb):
@@ -35,7 +35,7 @@ def boom(input_val, DBG=True):
 
     candidates = np.copy(input_val)
 
-    start_mcb = ''
+    start_mcb = ""
 
     for k in range(leng):
 
@@ -52,15 +52,15 @@ def boom(input_val, DBG=True):
 
     candidates = np.copy(input_val)
 
-    start_mcb = ''
+    start_mcb = ""
 
     for k in range(leng):
 
         mcb = get_mcb(candidates, k)
-        if (mcb == '0'):
-            mcb = '1'
+        if mcb == "0":
+            mcb = "1"
         else:
-            mcb = '0'
+            mcb = "0"
         start_mcb += str(mcb)
         candidates = filter_candidates(candidates, start_mcb)
 
@@ -69,20 +69,21 @@ def boom(input_val, DBG=True):
 
     carbon_dioxyde = candidates[0]
 
-    return int(oxygen, 2)*int(carbon_dioxyde, 2)
+    return int(oxygen, 2) * int(carbon_dioxyde, 2)
+
 
 #############
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -93,18 +94,26 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 

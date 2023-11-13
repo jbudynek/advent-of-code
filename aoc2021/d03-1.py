@@ -1,5 +1,4 @@
 # coding: utf-8
-import numpy as np
 
 
 def boom(input_val, DBG=True):
@@ -12,18 +11,19 @@ def boom(input_val, DBG=True):
         nb_0 = 0
         nb_1 = 1
         for ll in input_val:
-            if ll[k] == '0':
+            if ll[k] == "0":
                 nb_0 += 1
-            if ll[k] == '1':
+            if ll[k] == "1":
                 nb_1 += 1
         if nb_0 < nb_1:
-            gamma += '1'
-            epsilon += '0'
+            gamma += "1"
+            epsilon += "0"
         else:
-            gamma += '0'
-            epsilon += '1'
+            gamma += "0"
+            epsilon += "1"
 
-    return int(gamma, 2)*int(epsilon, 2)
+    return int(gamma, 2) * int(epsilon, 2)
+
 
 #############
 

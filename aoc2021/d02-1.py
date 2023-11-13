@@ -1,5 +1,4 @@
 # coding: utf-8
-from timeit import default_timer as timer
 
 
 def parse_line(ll):
@@ -21,7 +20,8 @@ def boom(input_val, DBG=True):
         elif cmd == "down":
             y += val
 
-    return x*y
+    return x * y
+
 
 #############
 

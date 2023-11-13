@@ -2,25 +2,25 @@
 from collections import Counter
 from timeit import default_timer as timer
 
-
 # Helpers
 ##########
 
+
 def print_field(xyids, DBG=True):
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
-    x_min = min(coords, key=lambda t: t[0])[0]-1
-    x_max = max(coords, key=lambda t: t[0])[0]+1
-    y_min = min(coords, key=lambda t: t[1])[1]-1
-    y_max = max(coords, key=lambda t: t[1])[1]+1
+    x_min = min(coords, key=lambda t: t[0])[0] - 1
+    x_max = max(coords, key=lambda t: t[0])[0] + 1
+    y_min = min(coords, key=lambda t: t[1])[1] - 1
+    y_max = max(coords, key=lambda t: t[1])[1] + 1
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += str(xyids[(xx, yy)])
             else:
@@ -30,44 +30,45 @@ def print_field(xyids, DBG=True):
 
 def create_world(ccc, DBG=True):
     field = {}
-    for l in ccc:
-        xy = l.split(",")
+    for line in ccc:
+        xy = line.split(",")
         x = int(xy[0])
         y = int(xy[1])
-        field[(x, y)] = '#'
+        field[(x, y)] = "#"
 
     if DBG:
         print(field)
 
     return field
 
+
 # Main function
 ##########
 
 
-def add_fold(folds, l):
-    f = l.split()[2].split('=')
+def add_fold(folds, line):
+    f = line.split()[2].split("=")
     folds.append((f[0], int(f[1])))
 
 
 def process_folds(world, folds, all, DBG):
 
     for fold in folds:
-        l = fold[1]
-        if fold[0] == 'x':
+        line = fold[1]
+        if fold[0] == "x":
             for xy in list(world.keys()):
                 x = xy[0]
                 y = xy[1]
-                if x > l:
+                if x > line:
                     del world[xy]
-                    world[(l-(x-l), y)] = '#'
-        elif fold[0] == 'y':
+                    world[(line - (x - line), y)] = "#"
+        elif fold[0] == "y":
             for xy in list(world.keys()):
                 x = xy[0]
                 y = xy[1]
-                if y > l:
+                if y > line:
                     del world[xy]
-                    world[(x, l-(y-l))] = '#'
+                    world[(x, line - (y - line))] = "#"
 
         if DBG:
             print_field(world)
@@ -78,19 +79,19 @@ def process_folds(world, folds, all, DBG):
 
 
 def count_dots(world):
-    return Counter(world.values())['#']  # size would also work
+    return Counter(world.values())["#"]  # size would also work
 
 
 def parse_input(input_val, DBG):
     lines = []
     folds = []
-    for l in input_val:
-        if l == '':
+    for line in input_val:
+        if line == "":
             continue
-        elif l[0] == "f":
-            add_fold(folds, l)
+        elif line[0] == "f":
+            add_fold(folds, line)
         else:
-            lines.append(l)
+            lines.append(line)
 
     world = create_world(lines, DBG)
     return (world, folds)
@@ -120,36 +121,46 @@ def boom_part2(input_val, DBG=True):
     ret = count_dots(world)
 
     return ret
+
+
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -168,6 +179,7 @@ def test_part2(cc=None, expected=None, DBG=False):
     t_end = timer()
 
     return output_test(cc, t_start, t_end, result, expected)
+
 
 # Test cases
 ##########
@@ -194,7 +206,7 @@ tt1 = """6,10
 
 fold along y=7
 fold along x=5"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 17, False)
 test_part2(tt1, -1, False)
 

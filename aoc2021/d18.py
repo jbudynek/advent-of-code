@@ -2,8 +2,6 @@
 import copy
 from timeit import default_timer as timer
 
-import numpy as np
-
 # Main function
 ##########
 
@@ -15,7 +13,7 @@ class Pair:
         self.parent = parent
 
     def __str__(self):
-        return "["+str(self.lhs)+","+str(self.rhs)+"]"
+        return "[" + str(self.lhs) + "," + str(self.rhs) + "]"
 
 
 class RegularNumber:
@@ -36,10 +34,10 @@ def increase_depth(n, d_map):
         d_map[n.lhs] = d_map[n] + 1
         d_map[n.rhs] = d_map[n] + 1
         ret = increase_depth(n.lhs, d_map)
-        if ret != None:
+        if ret is not None:
             return ret
         ret = increase_depth(n.rhs, d_map)
-        if ret != None:
+        if ret is not None:
             return ret
 
 
@@ -58,10 +56,10 @@ def look_for_ten(n, n_map):
         return None
     else:
         ret = look_for_ten(n.lhs, n_map)
-        if ret != None:
+        if ret is not None:
             return ret
         ret = look_for_ten(n.rhs, n_map)
-        if ret != None:
+        if ret is not None:
             return ret
 
 
@@ -87,7 +85,7 @@ def reduce(pair, DBG=True):
             # find first pair that has depth >=4
             to_explode = find_deep_pair(pair)
             # explode
-            if to_explode != None:
+            if to_explode is not None:
                 explode(to_explode, l_to_r)
                 cont = True
 
@@ -98,7 +96,7 @@ def reduce(pair, DBG=True):
         # find first reg num >= 10
         bigger_than_ten = find_big_number(pair)
         # split
-        if bigger_than_ten != None:
+        if bigger_than_ten is not None:
             split(bigger_than_ten)
             cont = True
 
@@ -120,33 +118,33 @@ def build_left_to_right(root):
 
 
 def fing_reg_num_to_the_left(regnum, l_to_r):
-    l = len(l_to_r)
-    for i in range(l):
+    len_l_to_r = len(l_to_r)
+    for i in range(len_l_to_r):
         if l_to_r[i] == regnum and i > 0:
-            return l_to_r[i-1]
+            return l_to_r[i - 1]
     return None
 
 
 def fing_reg_num_to_the_right(regnum, l_to_r):
-    l = len(l_to_r)
-    for i in range(l):
-        if l_to_r[i] == regnum and i < l-1:
-            return l_to_r[i+1]
+    len_l_to_r = len(l_to_r)
+    for i in range(len_l_to_r):
+        if l_to_r[i] == regnum and i < len_l_to_r - 1:
+            return l_to_r[i + 1]
     return None
 
 
 def explode(pair, l_to_r):
-    # To explode a pair, the pair's left value is added to the first regular number
-    # to the left of the exploding pair (if any), and the pair's right value is added
-    # to the first regular number to the right of the exploding pair (if any). Exploding pairs
-    # will always consist of two regular numbers. Then, the entire exploding pair is replaced
-    # with the regular number 0.
+    # To explode a pair, the pair's left value is added to the first regular
+    # number to the left of the exploding pair (if any), and the pair's right
+    # value is added to the first regular number to the right of the exploding
+    # pair (if any). Exploding pairs will always consist of two regular numbers.
+    # Then, the entire exploding pair is replaced with the regular number 0.
 
     regnum_left = fing_reg_num_to_the_left(pair.lhs, l_to_r)
     regnum_right = fing_reg_num_to_the_right(pair.rhs, l_to_r)
-    if regnum_left != None:
+    if regnum_left is not None:
         regnum_left.value += pair.lhs.value
-    if regnum_right != None:
+    if regnum_right is not None:
         regnum_right.value += pair.rhs.value
 
     if pair.parent.lhs == pair:
@@ -161,9 +159,8 @@ def split(regnum):
     # element of the pair should be the regular number divided by two and rounded up.
     # For example, 10 becomes [5,5], 11 becomes [5,6], 12 becomes [6,6], and so on.
     newpair = Pair(None, None, None)
-    newpair.lhs = RegularNumber(regnum.value//2, newpair)
-    newpair.rhs = RegularNumber(
-        (regnum.value//2) + (regnum.value % 2), newpair)
+    newpair.lhs = RegularNumber(regnum.value // 2, newpair)
+    newpair.rhs = RegularNumber((regnum.value // 2) + (regnum.value % 2), newpair)
 
     if regnum.parent.lhs == regnum:
         regnum.parent.lhs = newpair
@@ -183,27 +180,27 @@ def sf_add(lhsf, rhsf, DBG=True):
 
 def parse_sf(lll, DBG=True):
     idx = 0
-    l = len(lll)
+    len_lll = len(lll)
 
     root = Pair(None, None, None)
     idx += 1
     cur = root
-    while idx < l:
+    while idx < len_lll:
         c = lll[idx]
-        if c == '[':
+        if c == "[":
             node = Pair(None, None, cur)
-            if cur.lhs == None:
+            if cur.lhs is None:
                 cur.lhs = node
             else:
                 cur.rhs = node
             cur = node
-        elif c == ',':
+        elif c == ",":
             cur = cur.parent
-        elif c == ']':
+        elif c == "]":
             cur = cur.parent
         else:
             num = RegularNumber(int(c), cur)
-            if cur.lhs == None:
+            if cur.lhs is None:
                 cur.lhs = num
             else:
                 cur.rhs = num
@@ -220,7 +217,7 @@ def magnitude(n):
     if isinstance(n, RegularNumber):
         return n.value
     else:
-        return 3*magnitude(n.lhs)+2*magnitude(n.rhs)
+        return 3 * magnitude(n.lhs) + 2 * magnitude(n.rhs)
 
 
 def boom_part1(input_val, DBG=True):
@@ -242,52 +239,67 @@ def boom_part1(input_val, DBG=True):
 
 def boom_part2(input_val, DBG=True):
     all_fishes = []
-    sum_sf = parse_sf(input_val[0], DBG)
+    # sum_sf = parse_sf(input_val[0], DBG)
 
     for lll in input_val:
         all_fishes.append(parse_sf(lll, DBG))
 
-    l = len(all_fishes)
+    len_all_fishes = len(all_fishes)
     max_val = 0
 
-    for i in range(l):
-        for j in range(l):
+    for i in range(len_all_fishes):
+        for j in range(len_all_fishes):
             if i != j:
-                max_val = max(max_val, magnitude(
-                    sf_add(copy.deepcopy(all_fishes[i]), copy.deepcopy(all_fishes[j]))))
+                max_val = max(
+                    max_val,
+                    magnitude(
+                        sf_add(
+                            copy.deepcopy(all_fishes[i]), copy.deepcopy(all_fishes[j])
+                        )
+                    ),
+                )
 
     return max_val
+
 
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -307,36 +319,37 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
 
 # tests explode
-root = parse_sf('[[[[[9,8],1],2],3],4]')
+root = parse_sf("[[[[[9,8],1],2],3],4]")
 l_to_r = build_left_to_right(root)
 to_explode = find_deep_pair(root)
 explode(to_explode, l_to_r)
 print(str(root))  # [[[[0,9],2],3],4]
 
-root = parse_sf('[7,[6,[5,[4,[3,2]]]]]')
+root = parse_sf("[7,[6,[5,[4,[3,2]]]]]")
 l_to_r = build_left_to_right(root)
 to_explode = find_deep_pair(root)
 explode(to_explode, l_to_r)
 print(str(root))  # [7,[6,[5,[7,0]]]]
 
-root = parse_sf('[[6,[5,[4,[3,2]]]],1]')
+root = parse_sf("[[6,[5,[4,[3,2]]]],1]")
 l_to_r = build_left_to_right(root)
 to_explode = find_deep_pair(root)
 explode(to_explode, l_to_r)
 print(str(root))  # [[6,[5,[7,0]]],3]
 
-root = parse_sf('[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]')
+root = parse_sf("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]")
 l_to_r = build_left_to_right(root)
 to_explode = find_deep_pair(root)
 explode(to_explode, l_to_r)
 print(str(root))  # [[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]
 
-root = parse_sf('[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]')
+root = parse_sf("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]")
 l_to_r = build_left_to_right(root)
 to_explode = find_deep_pair(root)
 explode(to_explode, l_to_r)
@@ -345,14 +358,14 @@ print(str(root))  # [[3,[2,[8,0]]],[9,[5,[7,0]]]]
 # tests sums
 tt1 = """[[[[4,3],4],4],[7,[[8,4],9]]]
 [1,1]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, "[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", True)
 
 tt1 = """[1,1]
 [2,2]
 [3,3]
 [4,4]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, "[[[[1,1],[2,2]],[3,3]],[4,4]]", True)
 
 tt1 = """[1,1]
@@ -360,7 +373,7 @@ tt1 = """[1,1]
 [3,3]
 [4,4]
 [5,5]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, "[[[[3,0],[5,3]],[4,4]],[5,5]]", True)
 
 tt1 = """[1,1]
@@ -369,7 +382,7 @@ tt1 = """[1,1]
 [4,4]
 [5,5]
 [6,6]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, "[[[[5,0],[7,4]],[5,5]],[6,6]]", True)
 
 
@@ -383,7 +396,7 @@ tt1 = """[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]]
 [1,[[[9,3],9],[[9,0],[0,7]]]]
 [[[5,[7,4]],7],1]
 [[[[4,2],2],6],[8,7]]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, "[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]", True)
 
 # Test magnitudes
@@ -397,8 +410,7 @@ mag = magnitude(parse_sf("[[[[3,0],[5,3]],[4,4]],[5,5]]"))
 print(mag, mag == 791)
 mag = magnitude(parse_sf("[[[[5,0],[7,4]],[5,5]],[6,6]]"))
 print(mag, mag == 1137)
-mag = magnitude(
-    parse_sf("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]"))
+mag = magnitude(parse_sf("[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]"))
 print(mag, mag == 3488)
 
 
@@ -412,11 +424,11 @@ tt1 = """[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
 [[9,3],[[9,9],[6,[4,9]]]]
 [[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
 [[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]"""
-tt1 = tt1.splitlines()
-test_part1(
-    tt1, "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]", True)
+tt1 = tt1.splitlines()  # type: ignore
+test_part1(tt1, "[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]", True)
 mag = magnitude(
-    parse_sf("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]"))
+    parse_sf("[[[[6,6],[7,6]],[[7,7],[7,0]]],[[[7,7],[7,7]],[[7,8],[9,9]]]]")
+)
 print(mag, mag == 4140)
 
 # test part 2
@@ -431,7 +443,7 @@ tt1 = """[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]
 [[9,3],[[9,9],[6,[4,9]]]]
 [[2,[[7,7],7]],[[5,8],[[9,3],[0,2]]]]
 [[[[5,2],5],[8,[3,7]]],[[5,[7,5]],[4,4]]]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part2(tt1, 3993, True)
 
 # Real data

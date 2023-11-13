@@ -10,19 +10,19 @@ import numpy as np
 
 def print_field(xyids, DBG=True):
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
-    x_min = min(coords, key=lambda t: t[0])[0]-1
-    x_max = max(coords, key=lambda t: t[0])[0]+1
-    y_min = min(coords, key=lambda t: t[1])[1]-1
-    y_max = max(coords, key=lambda t: t[1])[1]+1
+    x_min = min(coords, key=lambda t: t[0])[0] - 1
+    x_max = max(coords, key=lambda t: t[0])[0] + 1
+    y_min = min(coords, key=lambda t: t[1])[1] - 1
+    y_max = max(coords, key=lambda t: t[1])[1] + 1
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += str(xyids[(xx, yy)])
             else:
@@ -34,13 +34,13 @@ def create_world(ccc, DBG=True):
     field = {}
     x = -1
     y = -1
-    v_id = 0
+    # v_id = 0
     for line in ccc:
         y += 1
         x = -1
         for c in line:
             x += 1
-            if c == '#':
+            if c == "#":
                 field[(x, y)] = 1
             else:
                 field[(x, y)] = 0
@@ -59,6 +59,7 @@ def get_bounds(tracks, DBG):
     y_max = max(coords, key=lambda t: t[1])[1]
     return (x_min, x_max, y_min, y_max)
 
+
 # Main function
 ##########
 
@@ -67,25 +68,33 @@ def parse_algo(line):
     algo = np.zeros(512, dtype=int)
     idx = 0
     for cc in line:
-        if cc == '#':
+        if cc == "#":
             algo[idx] = 1
         idx += 1
     return algo
 
 
 def process(world, xy, algo, fill):
-    dirs = [(-1, -1), (0, -1), (1, -1),
-            (-1, 0), (0, 0), (1, 0),
-            (-1, 1), (0, 1), (1, 1)]
-    bin_string = ''
+    dirs = [
+        (-1, -1),
+        (0, -1),
+        (1, -1),
+        (-1, 0),
+        (0, 0),
+        (1, 0),
+        (-1, 1),
+        (0, 1),
+        (1, 1),
+    ]
+    bin_string = ""
     for d in dirs:
-        nxy = (xy[0]+d[0], xy[1]+d[1])
+        nxy = (xy[0] + d[0], xy[1] + d[1])
         if nxy not in world:
             bin_string += str(fill)
         elif world[nxy] == 1:
-            bin_string += '1'
+            bin_string += "1"
         else:
-            bin_string += '0'
+            bin_string += "0"
     return int(bin_string, 2)
 
 
@@ -107,8 +116,8 @@ def enhance(input_val, nb_steps, DBG=True):
 
         new_world = world.copy()
 
-        for x in range(x_min-1, x_max+2):
-            for y in range(y_min-1, y_max+2):
+        for x in range(x_min - 1, x_max + 2):
+            for y in range(y_min - 1, y_max + 2):
                 xy = (x, y)
                 nxy_val = process(world, xy, algo, fill)
                 new_world[xy] = algo[nxy_val]
@@ -132,31 +141,39 @@ def boom_part2(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -176,6 +193,7 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
@@ -187,7 +205,7 @@ tt1 = """..#.#..#####.#.#.#.###.##.....###.##.#..###.####..#####..#....#..#..##.
 ##..#
 ..#..
 ..###"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 35, True)
 test_part2(tt1, 3351, False)
 

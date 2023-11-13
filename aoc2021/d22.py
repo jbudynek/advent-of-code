@@ -1,5 +1,4 @@
 # coding: utf-8
-from collections import defaultdict
 import re
 from timeit import default_timer as timer
 
@@ -11,8 +10,8 @@ import numpy as np
 
 def parse_line(lll):
     # on x=-20..26,y=-36..17,z=-47..7
-    rr = np.asarray(re.findall(r'-?\d+', lll), dtype=int)
-    return (lll[1] == 'n', rr[0], rr[1], rr[2], rr[3], rr[4], rr[5])
+    rr = np.asarray(re.findall(r"-?\d+", lll), dtype=int)
+    return (lll[1] == "n", rr[0], rr[1], rr[2], rr[3], rr[4], rr[5])
 
 
 class Box:
@@ -26,13 +25,13 @@ class Box:
         self.on = on
 
     def intersects(self, box2):
-        if not(self.xmin <= box2.xmax and self.xmax >= box2.xmin):
+        if not (self.xmin <= box2.xmax and self.xmax >= box2.xmin):
             return False
 
-        if not(self.ymin <= box2.ymax and self.ymax >= box2.ymin):
+        if not (self.ymin <= box2.ymax and self.ymax >= box2.ymin):
             return False
 
-        if not(self.zmin <= box2.zmax and self.zmax >= box2.zmin):
+        if not (self.zmin <= box2.zmax and self.zmax >= box2.zmin):
             return False
 
         return True
@@ -52,15 +51,25 @@ class Box:
         return Box(xmin, xmax, ymin, ymax, zmin, zmax, on)
 
     def volume(self):
-        v = (self.xmax - self.xmin + 1) * (self.ymax -
-                                           self.ymin + 1) * (self.zmax - self.zmin + 1)
+        v = (
+            (self.xmax - self.xmin + 1)
+            * (self.ymax - self.ymin + 1)
+            * (self.zmax - self.zmin + 1)
+        )
         if self.on:
             return v
         else:
             return -v
 
     def is_eligible(self):
-        if self.xmin < -50 or self.xmax > 50 or self.ymin < -50 or self.ymax > 50 or self.zmin < -50 or self.zmax > 50:
+        if (
+            self.xmin < -50
+            or self.xmax > 50
+            or self.ymin < -50
+            or self.ymax > 50
+            or self.zmin < -50
+            or self.zmax > 50
+        ):
             return False
         else:
             return True
@@ -102,31 +111,39 @@ def boom_part2(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -146,6 +163,7 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
@@ -154,7 +172,7 @@ tt1 = """on x=10..12,y=10..12,z=10..12
 on x=11..13,y=11..13,z=11..13
 off x=9..11,y=9..11,z=9..11
 on x=10..10,y=10..10,z=10..10"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 39, True)
 
 tt1 = """on x=-20..26,y=-36..17,z=-47..7
@@ -179,7 +197,7 @@ off x=18..30,y=-20..-8,z=-3..13
 on x=-41..9,y=-7..43,z=-33..15
 on x=-54112..-39298,y=-85059..-49293,z=-27449..7877
 on x=967..23432,y=45373..81175,z=27513..53682"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 590784, True)
 
 tt1 = """on x=-5..47,y=-31..22,z=-19..33
@@ -242,7 +260,7 @@ off x=-27365..46395,y=31009..98017,z=15428..76570
 off x=-70369..-16548,y=22648..78696,z=-1892..86821
 on x=-53470..21291,y=-120233..-33476,z=-44150..38147
 off x=-93533..-4276,y=-16170..68771,z=-104985..-24507"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part2(tt1, 2758514936282235, True)
 
 

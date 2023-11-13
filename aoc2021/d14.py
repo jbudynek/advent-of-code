@@ -8,8 +8,8 @@ from timeit import default_timer as timer
 
 def parse_input(ll):
     rules = {}
-    for l in ll:
-        ls = l.split(" -> ")
+    for line in ll:
+        ls = line.split(" -> ")
         rules[ls[0]] = ls[1]
     return rules
 
@@ -21,8 +21,8 @@ def run_steps(input_val, nb_steps, DBG=True):
 
     # we count pairs!
     pair_count = defaultdict(int)
-    for i in range(len(template)-1):
-        pair = template[i]+template[i+1]
+    for i in range(len(template) - 1):
+        pair = template[i] + template[i + 1]
         pair_count[pair] += 1
 
     step = 0
@@ -30,8 +30,8 @@ def run_steps(input_val, nb_steps, DBG=True):
         step += 1
         new_pair_count = pair_count.copy()
         for pair in pair_count.keys():
-            new_pair_lhs = pair[0]+rules[pair]
-            new_pair_rhs = rules[pair]+pair[1]
+            new_pair_lhs = pair[0] + rules[pair]
+            new_pair_rhs = rules[pair] + pair[1]
             new_pair_count[new_pair_lhs] += pair_count[pair]
             new_pair_count[new_pair_rhs] += pair_count[pair]
             new_pair_count[pair] -= pair_count[pair]
@@ -47,7 +47,7 @@ def run_steps(input_val, nb_steps, DBG=True):
     # and add first left character
     char_count[template[0]] += 1
 
-    return max(char_count.values())-min(char_count.values())
+    return max(char_count.values()) - min(char_count.values())
 
 
 def boom_part1(input_val, DBG=True):
@@ -57,36 +57,45 @@ def boom_part1(input_val, DBG=True):
 def boom_part2(input_val, DBG=True):
     return run_steps(input_val, 40, DBG)
 
+
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -105,6 +114,7 @@ def test_part2(cc=None, expected=None, DBG=False):
     t_end = timer()
 
     return output_test(cc, t_start, t_end, result, expected)
+
 
 # Test cases
 ##########
@@ -128,7 +138,7 @@ BB -> N
 BC -> B
 CC -> N
 CN -> C"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 1588, True)
 test_part2(tt1, 2188189693529, True)
 

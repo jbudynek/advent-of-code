@@ -1,5 +1,4 @@
 # coding: utf-8
-from timeit import default_timer as timer
 
 
 def parse_line(ll):
@@ -17,13 +16,13 @@ def boom(input_val, DBG=True):
         (cmd, val) = parse_line(ll)
         if cmd == "forward":
             x += val
-            y += aim*val
+            y += aim * val
         elif cmd == "up":
             aim -= val
         elif cmd == "down":
             aim += val
 
-    return x*y
+    return x * y
 
 
 #############

@@ -3,6 +3,7 @@ import numpy as np
 
 ##########
 
+
 def boom(input_val, DBG=True):
     depth = np.asarray(input_val, dtype=int)
     depth = np.append(depth, np.NaN)
@@ -10,6 +11,7 @@ def boom(input_val, DBG=True):
     delta = np.subtract(depth, depth_2)
     ret = np.sum(delta > 0)
     return ret
+
 
 ##########
 

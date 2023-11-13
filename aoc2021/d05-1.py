@@ -9,24 +9,25 @@ import numpy as np
 
 def print_field(xyids, DBG=True):
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
-    x_min = min(coords, key=lambda t: t[0])[0]-1
-    x_max = max(coords, key=lambda t: t[0])[0]+1
-    y_min = min(coords, key=lambda t: t[1])[1]-1
-    y_max = max(coords, key=lambda t: t[1])[1]+1
+    x_min = min(coords, key=lambda t: t[0])[0] - 1
+    x_max = max(coords, key=lambda t: t[0])[0] + 1
+    y_min = min(coords, key=lambda t: t[1])[1] - 1
+    y_max = max(coords, key=lambda t: t[1])[1] + 1
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += str(xyids[(xx, yy)])
             else:
                 ss += " "
         print(ss)
+
 
 # Main function
 ##########
@@ -34,8 +35,8 @@ def print_field(xyids, DBG=True):
 
 def parse_line(ll, DBG=True):
     ll = ll.split(" -> ")
-    origin = np.asarray(ll[0] .split(","), dtype=int)
-    dest = np.asarray(ll[1] .split(","), dtype=int)
+    origin = np.asarray(ll[0].split(","), dtype=int)
+    dest = np.asarray(ll[1].split(","), dtype=int)
     return (origin, dest)
 
 
@@ -48,12 +49,10 @@ def fill_world(world, origin, destination, DBG=True):
     vd_n = np.sign(vd)
     cur_pos = np.copy(origin)
     while (np.not_equal(cur_pos, destination)).any():
-        world[(cur_pos[0], cur_pos[1])] = world.get(
-            (cur_pos[0], cur_pos[1]), 0) + 1
+        world[(cur_pos[0], cur_pos[1])] = world.get((cur_pos[0], cur_pos[1]), 0) + 1
         cur_pos = np.add(cur_pos, vd_n)
     # dont forget the last one
-    world[(cur_pos[0], cur_pos[1])] = world.get(
-        (cur_pos[0], cur_pos[1]), 0) + 1
+    world[(cur_pos[0], cur_pos[1])] = world.get((cur_pos[0], cur_pos[1]), 0) + 1
     if DBG:
         print_field(world)
     return world
@@ -75,19 +74,20 @@ def boom(input_val, DBG=True):
             ret += 1
     return ret
 
+
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -98,18 +98,26 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -127,7 +135,7 @@ tt1 = """0,9 -> 5,9
 3,4 -> 1,4
 0,0 -> 8,8
 5,5 -> 8,2"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test(tt1, 5, True)
 # sys.exit()
 

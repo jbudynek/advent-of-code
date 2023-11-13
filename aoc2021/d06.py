@@ -15,7 +15,7 @@ def boom_part1(input_val, DBG=True):
     for day in np.arange(1, 81):
         ia = ia - 1
         ia[ia == -1] = 6
-        ia = np.append(ia, [8]*nb_z)
+        ia = np.append(ia, [8] * nb_z)
         nb_z = np.count_nonzero(ia == 0)
         if DBG:
             lenia = len(ia)
@@ -36,7 +36,7 @@ def boom_part2(input_val, DBG=True):
     for day in np.arange(1, 257):
         loopy = status_to_count[0]
         for i in range(1, 9):
-            status_to_count[i-1] = status_to_count[i]
+            status_to_count[i - 1] = status_to_count[i]
         status_to_count[6] += loopy
         status_to_count[8] = nb_z
         nb_z = status_to_count[0]
@@ -45,36 +45,45 @@ def boom_part2(input_val, DBG=True):
 
     return np.sum(status_to_count)
 
+
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -94,12 +103,13 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
 
 tt1 = "3,4,3,1,2"
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 5934, True)
 test_part2(tt1, 26984457539, True)
 # sys.exit()

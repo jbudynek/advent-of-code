@@ -1,7 +1,7 @@
 # coding: utf-8
-from collections import Counter, defaultdict
 import copy
 import re
+from collections import Counter, defaultdict
 from timeit import default_timer as timer
 
 import numpy as np
@@ -20,18 +20,18 @@ def parse_scanners(input_val):
     ret = []
     while idx < len(input_val):
         ll = input_val[idx]
-        if ll == '':
+        if ll == "":
             idx += 1
             continue
-        elif ll[1] == '-' and ll[0] == '-':
+        elif ll[1] == "-" and ll[0] == "-":
             cur_scan = Scanner()
             cur_scan.position = (0, 0, 0)
             cur_scan.rot_dir = (0, 0)
             cur_scan.beacons = []
-            cur_scan.id = int(re.findall(r'-?\d+', ll)[0])
+            cur_scan.id = int(re.findall(r"-?\d+", ll)[0])
             ret.append(cur_scan)
         else:
-            xyz = np.asarray(re.findall(r'-?\d+', ll), dtype=int)
+            xyz = np.asarray(re.findall(r"-?\d+", ll), dtype=int)
             cur_scan.beacons.append((xyz[0], xyz[1], xyz[2]))
         idx += 1
 
@@ -52,7 +52,6 @@ def get_all_rot_dir():
         (0, 5),
         (0, 6),
         (0, 7),
-
         (1, 0),
         (1, 1),
         (1, 2),
@@ -61,7 +60,6 @@ def get_all_rot_dir():
         (1, 5),
         (1, 6),
         (1, 7),
-
         (2, 0),
         (2, 1),
         (2, 2),
@@ -70,7 +68,6 @@ def get_all_rot_dir():
         (2, 5),
         (2, 6),
         (2, 7),
-
         (3, 0),
         (3, 1),
         (3, 2),
@@ -79,7 +76,6 @@ def get_all_rot_dir():
         (3, 5),
         (3, 6),
         (3, 7),
-
         (4, 0),
         (4, 1),
         (4, 2),
@@ -88,7 +84,6 @@ def get_all_rot_dir():
         (4, 5),
         (4, 6),
         (4, 7),
-
         (5, 0),
         (5, 1),
         (5, 2),
@@ -151,29 +146,39 @@ def apply_rot_dir(scan, rot_dir):
 
 
 def match(ks, us):
-    # performance is quite bad, there must be a better way to see if it matches, possibly with convolutions?
+    # performance is quite bad, there must be a better way to see if it matches,
+    # possibly with convolutions?
 
     nkb = len(ks.beacons)
     nub = len(us.beacons)
     s_world = defaultdict(int)
     for b in ks.beacons:
-        xyz = (ks.position[0]+b[0], ks.position[1]+b[1], ks.position[2]+b[2])
+        xyz = (ks.position[0] + b[0], ks.position[1] + b[1], ks.position[2] + b[2])
         s_world[xyz] += 1
 
     for i_k in range(nkb):
         for i_u in range(i_k, nub):
-            k_xyz = (ks.beacons[i_k][0] + ks.position[0], ks.beacons[i_k]
-                     [1] + ks.position[1], ks.beacons[i_k][2] + ks.position[2])
-            u_xyz = (us.beacons[i_u][0] + us.position[0], us.beacons[i_u]
-                     [1] + us.position[1], us.beacons[i_u][2] + us.position[2])
+            k_xyz = (
+                ks.beacons[i_k][0] + ks.position[0],
+                ks.beacons[i_k][1] + ks.position[1],
+                ks.beacons[i_k][2] + ks.position[2],
+            )
+            u_xyz = (
+                us.beacons[i_u][0] + us.position[0],
+                us.beacons[i_u][1] + us.position[1],
+                us.beacons[i_u][2] + us.position[2],
+            )
 
-            delta = (u_xyz[0]-k_xyz[0], u_xyz[1]-k_xyz[1], u_xyz[2]-k_xyz[2])
+            delta = (u_xyz[0] - k_xyz[0], u_xyz[1] - k_xyz[1], u_xyz[2] - k_xyz[2])
 
             world = copy.deepcopy(s_world)
 
             for bus in us.beacons:
-                u_xyz = (us.position[0]+bus[0] - delta[0], us.position[1] +
-                         bus[1] - delta[1], us.position[2]+bus[2] - delta[2])
+                u_xyz = (
+                    us.position[0] + bus[0] - delta[0],
+                    us.position[1] + bus[1] - delta[1],
+                    us.position[2] + bus[2] - delta[2],
+                )
                 world[u_xyz] += 1
 
             c2 = Counter(world.values())[2]
@@ -190,7 +195,7 @@ def compute_known_scanners(input_val):
     # parse and populate scanner 0 - this is what will not move
     # parse and populate scanners 1..n - we don't know position, rotation, orientation
     all_scanners = parse_scanners(input_val)
-    #all_scanners = all_scanners[0:2]+[all_scanners[4]] # for "unit tests"
+    # all_scanners = all_scanners[0:2]+[all_scanners[4]] # for "unit tests"
 
     # put scanner 0 in known_scanners
     # put scanners 1..n in unknown_scanners
@@ -216,8 +221,7 @@ def compute_known_scanners(input_val):
         for cur_rot_dir in rot_dirs:
             if found:
                 continue
-            test_scanner = apply_rot_dir(
-                copy.deepcopy(current_scanner), cur_rot_dir)
+            test_scanner = apply_rot_dir(copy.deepcopy(current_scanner), cur_rot_dir)
             for ks in known_scanners:  # SWITCH WITH PREVIOUS LOOP ?
                 if found:
                     continue
@@ -225,8 +229,15 @@ def compute_known_scanners(input_val):
                 if mm:
                     found = True
                     test_scanner.position = xyz
-                    print("intersection ", ks.id, test_scanner.id,
-                          xyz, "--", len(unknown_scanners), "left")
+                    print(
+                        "intersection ",
+                        ks.id,
+                        test_scanner.id,
+                        xyz,
+                        "--",
+                        len(unknown_scanners),
+                        "left",
+                    )
         if not found:
             unknown_scanners.append(current_scanner)
         else:
@@ -244,8 +255,7 @@ def boom_all(input_val):
     all_beacons = {}
     for ks in known_scanners:
         for b in ks.beacons:
-            bb = (b[0]+ks.position[0], b[1] +
-                  ks.position[1], b[2]+ks.position[2])
+            bb = (b[0] + ks.position[0], b[1] + ks.position[1], b[2] + ks.position[2])
             if bb not in all_beacons:
                 all_beacons[bb] = 1
 
@@ -254,11 +264,12 @@ def boom_all(input_val):
     max_manhattan = 0
     nks = len(known_scanners)
     for i_ks in range(nks):
-        for j_ks in range(i_ks+1, nks):
+        for j_ks in range(i_ks + 1, nks):
             pos1 = known_scanners[i_ks].position
             pos2 = known_scanners[j_ks].position
-            manhattan = abs(pos2[0]-pos1[0]) + \
-                abs(pos2[1]-pos1[1])+abs(pos2[2]-pos1[2])
+            manhattan = (
+                abs(pos2[0] - pos1[0]) + abs(pos2[1] - pos1[1]) + abs(pos2[2] - pos1[2])
+            )
             max_manhattan = max(max_manhattan, manhattan)
 
     ret2 = max_manhattan
@@ -280,31 +291,39 @@ def boom_part2(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -323,6 +342,7 @@ def test_part2(cc=None, expected=None, DBG=False):
     t_end = timer()
 
     return output_test(cc, t_start, t_end, result, expected)
+
 
 # Test cases
 ##########
@@ -464,7 +484,7 @@ tt1 = """--- scanner 0 ---
 891,-625,532
 -652,-548,-490
 30,-46,-14"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 79, True)
 test_part2(tt1, 3621, True)
 

@@ -6,18 +6,18 @@ from timeit import default_timer as timer
 
 
 def check_line(ll):
-    scores_check = {')': 3, ']': 57, '}': 1197, '>': 25137}
-    opens = ['(', '[', '{', '<']
-    open_to_close = {'(': ')', '[': ']', '{': '}', '<': '>'}
+    scores_check = {")": 3, "]": 57, "}": 1197, ">": 25137}
+    opens = ["(", "[", "{", "<"]
+    open_to_close = {"(": ")", "[": "]", "{": "}", "<": ">"}
     current_opens = []
     for cc in ll:
         if cc in opens:
             current_opens.append(cc)
         else:
-            if cc != open_to_close[current_opens[len(current_opens)-1]]:
+            if cc != open_to_close[current_opens[len(current_opens) - 1]]:
                 return scores_check[cc]
             else:
-                del current_opens[len(current_opens)-1]
+                del current_opens[len(current_opens) - 1]
     return 0
 
 
@@ -26,15 +26,15 @@ def boom_part1(input_val, DBG=True):
 
 
 def complete_line(ll):
-    scores_complete = {')': 1, ']': 2, '}': 3, '>': 4}
-    opens = ['(', '[', '{', '<']
-    open_to_close = {'(': ')', '[': ']', '{': '}', '<': '>'}
+    scores_complete = {")": 1, "]": 2, "}": 3, ">": 4}
+    opens = ["(", "[", "{", "<"]
+    open_to_close = {"(": ")", "[": "]", "{": "}", "<": ">"}
     current_opens = []
     for cc in ll:
         if cc in opens:
             current_opens.append(cc)
         else:
-            del current_opens[len(current_opens)-1]
+            del current_opens[len(current_opens) - 1]
     ret = 0
     for k in reversed(current_opens):
         ret *= 5
@@ -48,38 +48,47 @@ def boom_part2(input_val, DBG=True):
         if check_line(ll) != 0:
             continue
         ret.append(complete_line(ll))
-    return sorted(ret)[len(ret)//2]
+    return sorted(ret)[len(ret) // 2]
+
 
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -99,6 +108,7 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
@@ -113,7 +123,7 @@ tt1 = """[({(<(())[]>[[{[]{<()<>>
 [<(<(<(<{}))><([]([]()
 <{([([[(<>()){}]>(<<{{
 <{([{{}}[<[[[<>{}]]]>[]]"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 26397, True)
 test_part2(tt1, 288957, True)
 # sys.exit()

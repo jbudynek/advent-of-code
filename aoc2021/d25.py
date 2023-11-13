@@ -1,69 +1,69 @@
 # coding: utf-8
-import sys
 import copy
-import time
 from timeit import default_timer as timer
 
 # Helpers
 ##########
 
-CURSOR_UP_ONE = '\x1b[1A'
-ERASE_LINE = '\x1b[2K'
+CURSOR_UP_ONE = "\x1b[1A"
+ERASE_LINE = "\x1b[2K"
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
-RED_BG = '\x1b[101m'
-GREEN_BG = '\x1b[102m'
-YELLOW_BG = '\x1b[103m'
-DEFAULT_BG = '\x1b[49m'
+RED_BG = "\x1b[101m"
+GREEN_BG = "\x1b[102m"
+YELLOW_BG = "\x1b[103m"
+DEFAULT_BG = "\x1b[49m"
 
 
 def delete_last_lines_xmas(n=1):
     for _ in range(n):
-        print(CURSOR_UP_ONE  + CURSOR_UP_ONE)
+        print(CURSOR_UP_ONE + CURSOR_UP_ONE)
 
 
 def print_field_xmas(xyids):
-    coords = xyids.keys()
-    (x_min, x_max, y_min, y_max)=(0,140,0,140)
-    delete_last_lines_xmas(y_max-y_min+2)
+    # coords = xyids.keys()
+    (x_min, x_max, y_min, y_max) = (0, 140, 0, 140)
+    delete_last_lines_xmas(y_max - y_min + 2)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
-                if xyids[(xx, yy)]=='>':
-                    ss += GREEN_FG+'>'+DEFAULT_FG
+                if xyids[(xx, yy)] == ">":
+                    ss += GREEN_FG + ">" + DEFAULT_FG
                 else:
-                    ss += RED_FG+'V'+DEFAULT_FG
+                    ss += RED_FG + "V" + DEFAULT_FG
             else:
                 ss += " "
         print(ss)
-    #time.sleep(0.01)
+    # time.sleep(0.01)
+
 
 def print_field(xyids, DBG=True):
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
-    x_min = min(coords, key=lambda t: t[0])[0]-1
-    x_max = max(coords, key=lambda t: t[0])[0]+1
-    y_min = min(coords, key=lambda t: t[1])[1]-1
-    y_max = max(coords, key=lambda t: t[1])[1]+1
+    x_min = min(coords, key=lambda t: t[0])[0] - 1
+    x_max = max(coords, key=lambda t: t[0])[0] + 1
+    y_min = min(coords, key=lambda t: t[1])[1] - 1
+    y_max = max(coords, key=lambda t: t[1])[1] + 1
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += str(xyids[(xx, yy)])
             else:
                 ss += " "
         print(ss)
+
 
 def create_world(ccc, DBG=True):
     width = len(ccc[0])
@@ -76,13 +76,14 @@ def create_world(ccc, DBG=True):
         x = -1
         for c in line:
             x += 1
-            if c != '.':
+            if c != ".":
                 field[(x, y)] = c
 
     if DBG:
         print(field)
 
     return field, width, height
+
 
 # Main function
 ##########
@@ -91,28 +92,28 @@ def create_world(ccc, DBG=True):
 def move_east(world, width, height):
     new_world = {}
     for k in world.keys():
-        if world[k] == '>':
-            nxy = ((k[0]+1) % width, k[1])
+        if world[k] == ">":
+            nxy = ((k[0] + 1) % width, k[1])
             if nxy not in world:
-                new_world[nxy] = '>'
+                new_world[nxy] = ">"
             else:
-                new_world[k] = '>'
-        elif world[k] == 'v':
-            new_world[k] = 'v'
+                new_world[k] = ">"
+        elif world[k] == "v":
+            new_world[k] = "v"
     return new_world
 
 
 def move_south(world, width, height):
     new_world = {}
     for k in world.keys():
-        if world[k] == 'v':
-            nxy = (k[0], (k[1]+1) % height)
+        if world[k] == "v":
+            nxy = (k[0], (k[1] + 1) % height)
             if nxy not in world:
-                new_world[nxy] = 'v'
+                new_world[nxy] = "v"
             else:
-                new_world[k] = 'v'
-        elif world[k] == '>':
-            new_world[k] = '>'
+                new_world[k] = "v"
+        elif world[k] == ">":
+            new_world[k] = ">"
     return new_world
 
 
@@ -124,7 +125,7 @@ def boom_part1(input_val, DBG=True):
     step = 0
     if DBG:
         print_field(world, DBG)
-        print("step ",step)
+        print("step ", step)
     # loop
     while True:
         # step +=1
@@ -136,10 +137,10 @@ def boom_part1(input_val, DBG=True):
         # try to move south and move south
         world = move_south(world, width, height)
         # if state is the same, we're done
-        print_field_xmas(world) # for seasonal animaltion
+        print_field_xmas(world)  # for seasonal animaltion
         if DBG:
             print_field(world, DBG)
-            print("step ",step)
+            print("step ", step)
         if world == latest_state:
             return step
         # else start again
@@ -150,31 +151,39 @@ def boom_part1(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -185,6 +194,7 @@ def test_part1(cc=None, expected=None, DBG=False):
     t_end = timer()
 
     return output_test(cc, t_start, t_end, result, expected)
+
 
 # Test cases
 ##########
@@ -199,9 +209,9 @@ v>v.vv.v..
 .vv..>.>v.
 v.v..>>v.v
 ....v..v.>"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 58, False)
-#sys.exit()
+# sys.exit()
 ##########
 
 INPUT_FILE = "input-d25.txt"

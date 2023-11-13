@@ -9,7 +9,7 @@ import numpy as np
 
 
 def parse_bounds(str):
-    rr = np.asarray(re.findall(r'-?\d+', str), dtype=int)
+    rr = np.asarray(re.findall(r"-?\d+", str), dtype=int)
     return (rr[0], rr[1], rr[2], rr[3])
 
 
@@ -22,11 +22,16 @@ def make_step(position, velocity):
     else:
         velocity = velocity + complex(0, -1)
 
-    return(position, velocity)
+    return (position, velocity)
 
 
 def in_target(position, xmin, xmax, ymin, ymax):
-    return xmin <= position.real and position.real <= xmax and ymin <= position.imag and position.imag <= ymax
+    return (
+        xmin <= position.real
+        and position.real <= xmax
+        and ymin <= position.imag
+        and position.imag <= ymax
+    )
 
 
 def below_target(position, xmin, xmax, ymin, ymax):
@@ -65,44 +70,53 @@ def boom_part2(input_val, DBG=True):
     ret = 0
     max_x = max(xmin, xmax)
     max_y = abs(min(ymin, ymax))
-    for vx in range(2*max_x):
-        for vy in range(-2*max_y, 2*max_y):
+    for vx in range(2 * max_x):
+        for vy in range(-2 * max_y, 2 * max_y):
             velocity = complex(vx, vy)
             (_, inside) = launch(velocity, xmin, xmax, ymin, ymax)
             if inside:
                 ret += 1
     return ret
 
+
 # Testing and timing
 ##########
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def output_test(cc, t_start, t_end, result, expected):
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
@@ -122,12 +136,13 @@ def test_part2(cc=None, expected=None, DBG=False):
 
     return output_test(cc, t_start, t_end, result, expected)
 
+
 # Test cases
 ##########
 
 
 tt1 = "target area: x=20..30, y=-10..-5"
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 45, True)
 test_part2(tt1, 112, True)
 # sys.exit()
