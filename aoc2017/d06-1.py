@@ -1,23 +1,9 @@
 # coding: utf-8
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import operator
-# from collections import defaultdict
-# from collections import Counter
-# from collections import deque
-# from functools import reduce
-# from math import log
-# from itertools import combinations, permutations, product
-import pickle
-import copy
-import operator
-import re
-import string
-import sys
-import time
+#
 from timeit import default_timer as timer
 
 import numpy as np
+
 
 def parse_input(input_val):
     ii = input_val.split("\t")
@@ -30,17 +16,18 @@ def next_state(blocks):
     # distribute
     argmax = np.argmax(blocks)
     val = blocks[argmax]
-    l = len(blocks)
+    l_b = len(blocks)
     new_blocks = blocks.copy()
 
     new_blocks[argmax] = 0
-    idx = (argmax + 1) % l
-    while (val > 0):
+    idx = (argmax + 1) % l_b
+    while val > 0:
         new_blocks[idx] += 1
         val -= 1
-        idx = (idx+1) % l
+        idx = (idx + 1) % l_b
 
     return new_blocks
+
 
 def loop(blocks, DBG=True):
     cache = set()
@@ -49,7 +36,7 @@ def loop(blocks, DBG=True):
 
     round = 1
 
-    while(True):
+    while True:
         new_blocks = next_state(blocks)
         if DBG:
             print(round, new_blocks)
@@ -73,20 +60,21 @@ def boom(input_val, DBG=True):
 
     return round
 
+
 #############
 ############
 #############
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -97,18 +85,26 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
 
