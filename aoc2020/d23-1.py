@@ -1,24 +1,9 @@
 # coding: utf-8
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import operator
-# from collections import defaultdict
-# from collections import Counter
-# from functools import reduce
-# from math import log
-# from itertools import combinations, permutations, product
-import copy
-import operator
-import re
-import string
-import sys
-import time
 from collections import deque
 from timeit import default_timer as timer
 
-import numpy as np
-
 # use a deque
+
 
 def parse_cups(input_val, DBG):
 
@@ -45,7 +30,7 @@ def play_round(circle, move_id, DBG):
     if DBG:
         print("pick up:", three_cups)
 
-    dest = current_cup-1
+    dest = current_cup - 1
     if dest == 0:
         dest = max_cup
     while dest in three_cups:
@@ -56,12 +41,12 @@ def play_round(circle, move_id, DBG):
         print("destination: ", dest)
 
     idest = circle.index(dest)
-    circle.rotate(-idest-1)
+    circle.rotate(-idest - 1)
 
     circle.extend(three_cups)
 
     icur = circle.index(current_cup)
-    circle.rotate(-icur-1)
+    circle.rotate(-icur - 1)
 
     if DBG:
         print("end cups: ", circle)
@@ -72,7 +57,7 @@ def play_round(circle, move_id, DBG):
 def play_game(circle, total_moves, DBG=True):
     # game
     move_id = 1
-    while (move_id <= total_moves):
+    while move_id <= total_moves:
         if DBG:
             print("-- move ", move_id, " --")
         circle = play_round(circle, move_id, DBG)
@@ -99,7 +84,7 @@ def boom(input_val, DBG=True):
 
     circle = play_game(circle, 100, DBG)
 
-    if(DBG):
+    if DBG:
         print("== final ==")
         print(circle)
 
@@ -109,14 +94,14 @@ def boom(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -127,20 +112,29 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
+
 
 ########
 

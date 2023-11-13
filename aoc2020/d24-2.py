@@ -1,23 +1,6 @@
 # coding: utf-8
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import operator
-# from collections import defaultdict
-# from collections import Counter
-# from functools import reduce
-# from math import log
-# from itertools import combinations, permutations, product
-# from collections import deque
-import copy
-import operator
-import re
-import string
-import sys
-import time
 from enum import Enum
 from timeit import default_timer as timer
-
-import numpy as np
 
 
 class Dir(Enum):
@@ -29,8 +12,14 @@ class Dir(Enum):
     ne = 5
 
 
-DELTA = {Dir.e: complex(2, 0), Dir.se: complex(1, -1), Dir.sw: complex(-1, -1),
-         Dir.w: complex(-2, 0), Dir.nw: complex(-1, 1), Dir.ne: complex(1, 1)}
+DELTA = {
+    Dir.e: complex(2, 0),
+    Dir.se: complex(1, -1),
+    Dir.sw: complex(-1, -1),
+    Dir.w: complex(-2, 0),
+    Dir.nw: complex(-1, 1),
+    Dir.ne: complex(1, 1),
+}
 
 # black = 1
 # white = 0
@@ -50,7 +39,7 @@ def parse_lines(input_val, DBG):
                 line.append(Dir[dd])
                 idx = idx + 1
             else:
-                dd = Dir[d[idx]+d[idx+1]]
+                dd = Dir[d[idx] + d[idx + 1]]
                 line.append(dd)
                 idx = idx + 2
         lines.append(line)
@@ -74,9 +63,9 @@ def follow_lines(lines, DBG=True):
     flipped_tiles = {}
     for line in lines:
         tile_to_flip = follow_one_line(line, DBG)
-        if not tile_to_flip in flipped_tiles:
+        if tile_to_flip not in flipped_tiles:
             flipped_tiles[tile_to_flip] = 0
-        flipped_tiles[tile_to_flip] = (flipped_tiles[tile_to_flip]+1) % 2
+        flipped_tiles[tile_to_flip] = (flipped_tiles[tile_to_flip] + 1) % 2
         if DBG:
             print("tile in", tile_to_flip, "=", flipped_tiles[tile_to_flip])
     return flipped_tiles
@@ -96,7 +85,7 @@ def is_white_tile(zz, flipped_tiles):
 def nb_black_tiles_adjacent(zz, flipped_tiles):
     ret = 0
     for d in DELTA.values():
-        ib = is_black_tile(zz+d, flipped_tiles)
+        ib = is_black_tile(zz + d, flipped_tiles)
         if ib:
             ret = ret + 1
     return ret
@@ -126,6 +115,7 @@ def tick(flipped_tiles, DBG):
 
     return new_flipped_tiles
 
+
 ################
 
 
@@ -137,7 +127,7 @@ def boom(input_val, DBG=True):
 
     # tick
     max_tick = 100
-    for cur_tick in range(1, max_tick+1):
+    for cur_tick in range(1, max_tick + 1):
         flipped_tiles = tick(flipped_tiles, DBG)
         number_black = sum(flipped_tiles.values())
         if DBG:
@@ -145,18 +135,19 @@ def boom(input_val, DBG=True):
 
     return number_black
 
+
 ########################
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -167,20 +158,30 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
+
+
 #######
 
 

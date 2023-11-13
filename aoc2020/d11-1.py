@@ -1,19 +1,8 @@
 # coding: utf-8
-import copy
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
 
-import numpy as np
-
-CURSOR_UP_ONE = '\x1b[1A'
-ERASE_LINE = '\x1b[2K'
+CURSOR_UP_ONE = "\x1b[1A"
+ERASE_LINE = "\x1b[2K"
 
 
 def delete_last_lines(n=1):
@@ -24,26 +13,28 @@ def delete_last_lines(n=1):
 def print_field(xyids, DBG=True):
 
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
-    x_min = min(coords, key=lambda t: t[0])[0]-1
-    x_max = max(coords, key=lambda t: t[0])[0]+1
-    y_min = min(coords, key=lambda t: t[1])[1]-1
-    y_max = max(coords, key=lambda t: t[1])[1]+1
+    x_min = min(coords, key=lambda t: t[0])[0] - 1
+    x_max = max(coords, key=lambda t: t[0])[0] + 1
+    y_min = min(coords, key=lambda t: t[1])[1] - 1
+    y_max = max(coords, key=lambda t: t[1])[1] + 1
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
     # delete_last_lines(y_max-y_min)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += xyids[(xx, yy)]
             else:
                 ss += " "
         print(ss)
+
+
 #    time.sleep(0.3)
 
 
@@ -56,7 +47,7 @@ def create_world(ccc, DBG=True):
         x = -1
         for c in line:
             x += 1
-            if c == '.':
+            if c == ".":
                 continue
             else:
                 field[(x, y)] = c
@@ -73,49 +64,49 @@ def create_world(ccc, DBG=True):
 
 def count_occupied(world, x, y):
     occ = 0
-    if (x+1, y) in world and world[(x+1, y)] == '#':
+    if (x + 1, y) in world and world[(x + 1, y)] == "#":
         occ = occ + 1
-    if (x+1, y+1) in world and world[(x+1, y+1)] == '#':
+    if (x + 1, y + 1) in world and world[(x + 1, y + 1)] == "#":
         occ = occ + 1
-    if (x, y+1) in world and world[(x, y+1)] == '#':
+    if (x, y + 1) in world and world[(x, y + 1)] == "#":
         occ = occ + 1
-    if (x-1, y+1) in world and world[(x-1, y+1)] == '#':
+    if (x - 1, y + 1) in world and world[(x - 1, y + 1)] == "#":
         occ = occ + 1
-    if (x-1, y) in world and world[(x-1, y)] == '#':
+    if (x - 1, y) in world and world[(x - 1, y)] == "#":
         occ = occ + 1
-    if (x-1, y-1) in world and world[(x-1, y-1)] == '#':
+    if (x - 1, y - 1) in world and world[(x - 1, y - 1)] == "#":
         occ = occ + 1
-    if (x, y-1) in world and world[(x, y-1)] == '#':
+    if (x, y - 1) in world and world[(x, y - 1)] == "#":
         occ = occ + 1
-    if (x+1, y-1) in world and world[(x+1, y-1)] == '#':
+    if (x + 1, y - 1) in world and world[(x + 1, y - 1)] == "#":
         occ = occ + 1
     return occ
 
 
 def tick(world, x_min, x_max, y_min, y_max, DBG=False):
     new_world = {}
-    for x in range(x_min, x_max+1):
-        for y in range(y_min, y_max+1):
+    for x in range(x_min, x_max + 1):
+        for y in range(y_min, y_max + 1):
             if (x, y) in world:
                 occ = count_occupied(world, x, y)
-                if world[(x, y)] == 'L':
+                if world[(x, y)] == "L":
                     if occ == 0:
-                        new_world[(x, y)] = '#'
+                        new_world[(x, y)] = "#"
                     else:
-                        new_world[(x, y)] = 'L'
-                elif world[(x, y)] == '#':
+                        new_world[(x, y)] = "L"
+                elif world[(x, y)] == "#":
                     if occ >= 4:
-                        new_world[(x, y)] = 'L'
+                        new_world[(x, y)] = "L"
                     else:
-                        new_world[(x, y)] = '#'
+                        new_world[(x, y)] = "#"
     return new_world
 
 
 def nb_occupied_seats(world, x_min, x_max, y_min, y_max, DBG=False):
     count = 0
-    for x in range(x_min, x_max+1):
-        for y in range(y_min, y_max+1):
-            if (x, y) in world and world[(x, y)] == '#':
+    for x in range(x_min, x_max + 1):
+        for y in range(y_min, y_max + 1):
+            if (x, y) in world and world[(x, y)] == "#":
                 count = count + 1
     return count
 
@@ -123,14 +114,14 @@ def nb_occupied_seats(world, x_min, x_max, y_min, y_max, DBG=False):
 def boom(input_val, DBG=True):
     (world, x_min, x_max, y_min, y_max) = create_world(input_val, DBG)
 
-    while(True):
+    while True:
         count = nb_occupied_seats(world, x_min, x_max, y_min, y_max)
         new_world = tick(world, x_min, x_max, y_min, y_max)
         if DBG:
             print_field(new_world)
         # aa=input()
         new_count = nb_occupied_seats(new_world, x_min, x_max, y_min, y_max)
-        if (new_count == count):
+        if new_count == count:
             break
         world = new_world
 
@@ -143,14 +134,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

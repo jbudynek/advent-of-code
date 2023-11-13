@@ -19,4 +19,3 @@
 170 PRINT CHR$(10);"Found matching expenses!"
 180 PRINT e%(i);"+";e%(j);"+";e%(k);"=2020"
 190 PRINT "Answer part 2=";e%(i)*e%(j)*e%(k):END
-

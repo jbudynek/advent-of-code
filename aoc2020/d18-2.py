@@ -1,21 +1,7 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-import copy
 import operator
-import re
 import string
-import sys
 import time
-from itertools import product
-
-import numpy as np
 
 # used this implementation, with reversed precedence of * and +
 # https://codereview.stackexchange.com/a/46702
@@ -47,8 +33,8 @@ class Operator(object):
 
 class Calculator(object):
     operators = {
-        '*': Operator(operator.mul, 1),
-        '+': Operator(operator.add, 2),
+        "*": Operator(operator.mul, 1),
+        "+": Operator(operator.add, 2),
     }
 
     def __init__(self):
@@ -93,13 +79,13 @@ class Calculator(object):
 
                 last = c
                 tokens.append(value)
-            elif c == '(':
-                op_stack.append('(')
-            elif c == ')':
+            elif c == "(":
+                op_stack.append("(")
+            elif c == ")":
                 # closing parens found, unwind back to the matching open
                 while op_stack:
                     curr = op_stack.pop()
-                    if curr is '(':
+                    if curr == "(":
                         break
                     else:
                         tokens.append(curr)
@@ -108,7 +94,7 @@ class Calculator(object):
                 while op_stack:
                     curr = op_stack[-1]
                     # the 'is' check prevents comparing an Operator to a string
-                    if curr is '(':  # don't leave the current scope
+                    if curr == "(":  # don't leave the current scope
                         break
                     elif curr < op:
                         break
@@ -141,14 +127,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

@@ -1,20 +1,7 @@
 # coding: utf-8
-import copy
-import operator
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
 
 import numpy as np
-
-# from functools import reduce
-# from math import log
 
 
 def parse_rule(ii, DBG=True):
@@ -63,21 +50,21 @@ def get_invalidity(t, rules, DBG=True):
 def boom(input_val, DBG=True):
 
     rules = []
-    #my_ticket = [] unused in part 1
+    # my_ticket = [] unused in part 1
     nearby_tickets = []
     ppp = 0
     idx = 0
     while idx < len(input_val):
         ii = input_val[idx]
-        if (ii == ""):
+        if ii == "":
             ppp = ppp + 1
             idx = idx + 2
             continue
-        if (ppp == 0):
+        if ppp == 0:
             rules.append(parse_rule(ii, DBG))
-        elif (ppp == 1):
+        elif ppp == 1:
             _ = parse_ticket(ii, DBG)
-        elif (ppp == 2):
+        elif ppp == 2:
             nearby_tickets.append(parse_ticket(ii, DBG))
         idx = idx + 1
 
@@ -95,14 +82,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

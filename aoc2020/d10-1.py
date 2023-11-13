@@ -1,58 +1,70 @@
 # coding: utf-8
-import numpy as np
-import re
-import copy
-import sys
-import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
-#from itertools import combinations
 
-  
-def boom(input_val, DBG = True):
-    
+import numpy as np
+
+# from itertools import combinations
+
+
+def boom(input_val, DBG=True):
+
     numbers = np.asarray(input_val, dtype=np.int)
     numbers = np.sort(numbers)
-    if DBG:print(numbers)
+    if DBG:
+        print(numbers)
 
-    nb_1 = 1 # charging outlet
-    nb_3 = 1 # device adapter
+    nb_1 = 1  # charging outlet
+    nb_3 = 1  # device adapter
 
-    for idx in range(1,len(numbers)):
-        if (numbers[idx]-numbers[idx-1]==1):
-            if DBG:print(numbers[idx-1:idx+1],1)
-            nb_1=nb_1+1
-        elif (numbers[idx]-numbers[idx-1]==3):
-            if DBG:print(numbers[idx-1:idx+1],3)
-            nb_3=nb_3+1
+    for idx in range(1, len(numbers)):
+        if numbers[idx] - numbers[idx - 1] == 1:
+            if DBG:
+                print(numbers[idx - 1 : idx + 1], 1)  # noqa
+            nb_1 = nb_1 + 1
+        elif numbers[idx] - numbers[idx - 1] == 3:
+            if DBG:
+                print(numbers[idx - 1 : idx + 1], 3)  # noqa
+            nb_3 = nb_3 + 1
         else:
-            if DBG:print(numbers[idx-1:idx])
+            if DBG:
+                print(numbers[idx - 1 : idx])  # noqa
             print("***")
 
+    return (nb_1, nb_3, nb_1 * nb_3)
 
- 
-    return (nb_1,nb_3,nb_1*nb_3)
 
-def test(cc=None, expected=None, DBG = False):
+def test(cc=None, expected=None, DBG=False):
     start_millis = int(round(time.time() * 1000))
-    result = boom(cc,DBG)
+    result = boom(cc, DBG)
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected=="None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))    
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result)+ " -> success = "+ str(flag) + " -> expected " + expected)    
-    print((stop_millis-start_millis),"ms",int((stop_millis-start_millis)/1000),"s",int((stop_millis-start_millis)/1000/60),"min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 
-t1="""16
+t1 = """16
 10
 15
 5
@@ -64,11 +76,11 @@ t1="""16
 12
 4"""
 tt1 = t1.splitlines()
-test(tt1,(7,5,35),True)
-#sys.exit()
+test(tt1, (7, 5, 35), True)
+# sys.exit()
 
 
-t1="""28
+t1 = """28
 33
 18
 42
@@ -100,16 +112,16 @@ t1="""28
 10
 3"""
 tt1 = t1.splitlines()
-test(tt1,(22,10,220),True)
-#sys.exit()
+test(tt1, (22, 10, 220), True)
+# sys.exit()
 
-INPUT_FILE="input-d10.txt"
+INPUT_FILE = "input-d10.txt"
 f = open(INPUT_FILE, "r")
 contents = f.read()
 puzzle_input = contents.splitlines()
 f.close()
 
-ret = boom(puzzle_input, False) 
+ret = boom(puzzle_input, False)
 print(ret)
 
 # part 1 = (66, 32, 2112)

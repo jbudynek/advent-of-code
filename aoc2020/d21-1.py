@@ -1,22 +1,5 @@
 # coding: utf-8
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import operator
-# from collections import defaultdict
-# from collections import Counter
-# from collections import deque
-# from functools import reduce
-# from math import log
-# from itertools import combinations, permutations, product
-import copy
-import operator
-import re
-import string
-import sys
-import time
 from timeit import default_timer as timer
-
-import numpy as np
 
 # this gives the answer for part 1 and part 2
 
@@ -28,6 +11,7 @@ import numpy as np
 # if intersection has size one, ok it's matched
 # otherwise try to match the next unmatched allergen
 
+
 def parse_food(input_val, DBG):
     food_id_to_ingredients = []
     food_id_to_allergens = []
@@ -37,10 +21,10 @@ def parse_food(input_val, DBG):
         ss = ii.split("(")
         ingredients = ss[0].rstrip().split(" ")
         food_id_to_ingredients.append(ingredients)
-        allergens = ss[1][9:len(ss[1])-1].replace(" ", "").split(",")
+        allergens = ss[1][9 : len(ss[1]) - 1].replace(" ", "").split(",")  # noqa
         food_id_to_allergens.append(allergens)
         for a in allergens:
-            if not a in allergen_to_food_ids:
+            if a not in allergen_to_food_ids:
                 allergen_to_food_ids[a] = []
             allergen_to_food_ids[a].append(fid)
         fid = fid + 1
@@ -50,8 +34,9 @@ def parse_food(input_val, DBG):
 
 
 def boom(input_val, DBG=True):
-    (food_id_to_ingredients, food_id_to_allergens,
-     allergen_to_food_ids) = parse_food(input_val, DBG)
+    (food_id_to_ingredients, food_id_to_allergens, allergen_to_food_ids) = parse_food(
+        input_val, DBG
+    )
 
     nb_food = len(food_id_to_ingredients)
 
@@ -69,7 +54,7 @@ def boom(input_val, DBG=True):
 
     ingredient_to_allergen = {}
 
-    while(len(allergens_left_to_match) > 0):
+    while len(allergens_left_to_match) > 0:
         if DBG:
             print(len(allergens_left_to_match), allergens_left_to_match)
         for a in allergens_left_to_match:
@@ -80,13 +65,12 @@ def boom(input_val, DBG=True):
                 candidates_ingredients[fid] = set()
                 ingredients = food_id_to_ingredients[fid]
                 for i in ingredients:
-                    if not i in ingredient_to_allergen:
+                    if i not in ingredient_to_allergen:
                         candidates_ingredients[fid].add(i)
                 if len(candidates) == 0:
                     candidates.update(candidates_ingredients[fid])
                 else:
-                    candidates = candidates.intersection(
-                        candidates_ingredients[fid])
+                    candidates = candidates.intersection(candidates_ingredients[fid])
             if len(candidates) == 1:
                 ingredient_to_allergen[candidates.pop()] = a
                 allergens_left_to_match.remove(a)
@@ -101,17 +85,19 @@ def boom(input_val, DBG=True):
     for i in range(nb_food):
         ings = food_id_to_ingredients[i]
         for ing in ings:
-            if not ing in ingredient_to_allergen:
+            if ing not in ingredient_to_allergen:
                 inert_count = inert_count + 1
     if DBG:
         print("***inert_count:", inert_count)
 
-    ita_s = {k: v for k, v in sorted(
-        ingredient_to_allergen.items(), key=lambda item: item[1])}
+    ita_s = {
+        k: v
+        for k, v in sorted(ingredient_to_allergen.items(), key=lambda item: item[1])
+    }
 
-    cdil = ''
+    cdil = ""
     for kk in ita_s.keys():
-        cdil = cdil + ","+kk
+        cdil = cdil + "," + kk
 
     cdil = cdil[1:]
     if DBG:
@@ -121,14 +107,14 @@ def boom(input_val, DBG=True):
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -139,20 +125,29 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
+
 
 ########
 

@@ -1,35 +1,25 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-#from itertools import product
-import copy
-import operator
 import re
-import string
 import sys
 import time
 
 import numpy as np
 
+
 def parse_rule(ii, rules):
     rr = ii.split(":")
     nr = int(rr[0])
-    if '|' in rr[1]:
+    if "|" in rr[1]:
         rrr = rr[1].split("|")
-        lhs = np.asarray(re.findall(r'\d+', rrr[0]), dtype=np.int)
-        rhs = np.asarray(re.findall(r'\d+', rrr[1]), dtype=np.int)
+        lhs = np.asarray(re.findall(r"\d+", rrr[0]), dtype=np.int)
+        rhs = np.asarray(re.findall(r"\d+", rrr[1]), dtype=np.int)
         rules[nr] = (lhs, rhs)
     elif '"' in rr[1]:
         rules[nr] = rr[1][2]
     else:
-        lhs = np.asarray(re.findall(r'\d+', rr[1]), dtype=np.int)
+        lhs = np.asarray(re.findall(r"\d+", rr[1]), dtype=np.int)
         rules[nr] = lhs
+
 
 def parse_rules_and_messages(input_val, DBG):
     rules = {}
@@ -37,34 +27,35 @@ def parse_rules_and_messages(input_val, DBG):
     nl = len(input_val)
     idx = 0
     part = 0
-    while(idx < nl):
+    while idx < nl:
         ii = input_val[idx]
-        if ii == '':
-            part = part+1
+        if ii == "":
+            part = part + 1
         elif part == 0:
-            if (ii.startswith("8:")):
+            if ii.startswith("8:"):
                 parse_rule("8: 42 | 42 8", rules)
-            elif (ii.startswith("11:")):
+            elif ii.startswith("11:"):
                 parse_rule("11: 42 31 | 42 11 31", rules)
             else:
                 parse_rule(ii, rules)
         elif part == 1:
             messages.append(ii)
         else:
-            sys.exit("panic "+str(ii))
-        idx = idx+1
+            sys.exit("panic " + str(ii))
+        idx = idx + 1
 
     if DBG:
         print(rules)
     return (rules, messages)
 
+
 def match(message, m_pos, rules, r_idx, DBG):
     r = rules[r_idx]
-    if m_pos >= len(message): # too far
+    if m_pos >= len(message):  # too far
         return (False, m_pos)
     if isinstance(r, str):  # character
-        ret = (r == message[m_pos])
-        return (ret, m_pos+1)
+        ret = r == message[m_pos]
+        return (ret, m_pos + 1)
     elif isinstance(r, tuple):  # N rules | P rules
         # test first set of N rules
         (ret_b, ret_p) = test_n_rules(message, r[0], r_idx, m_pos, rules, DBG)
@@ -77,7 +68,7 @@ def match(message, m_pos, rules, r_idx, DBG):
             return (ret_b, ret_p)
 
         # no match
-        return(False, m_pos)
+        return (False, m_pos)
 
     else:  # N rules
         (ret_b, ret_p) = test_n_rules(message, r, r_idx, m_pos, rules, DBG)
@@ -89,7 +80,7 @@ def match(message, m_pos, rules, r_idx, DBG):
 def test_n_rules(message, r, r_idx, m_pos, rules, DBG):
     rrr = 0
     cur_m_pos = m_pos
-    while(rrr < len(r)):
+    while rrr < len(r):
         mm1 = False
         (mm1, new_m_pos) = match(message, cur_m_pos, rules, r[rrr], DBG)
         if not mm1:
@@ -116,21 +107,21 @@ def boom(input_val, DBG=True):
         mm = True
         cur_m_pos = 0
         nb_42 = 0
-        while(mm and (cur_m_pos < len(message))):
+        while mm and (cur_m_pos < len(message)):
             mm = False
             (mm, m_pos) = match(message, cur_m_pos, rules, 42, DBG)
             if mm:
-                nb_42 = nb_42+1
+                nb_42 = nb_42 + 1
                 cur_m_pos = m_pos
 
         # count numbers of matches to rule 31
         mm = True
         nb_31 = 0
-        while(mm and (cur_m_pos < len(message))):
+        while mm and (cur_m_pos < len(message)):
             mm = False
             (mm, m_pos) = match(message, cur_m_pos, rules, 31, DBG)
             if mm:
-                nb_31 = nb_31+1
+                nb_31 = nb_31 + 1
                 cur_m_pos = m_pos
 
         # check numbers and final position
@@ -146,14 +137,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 
@@ -207,7 +212,7 @@ aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"""
 
 
 tt1 = t1.splitlines()
-test(tt1, 12, True)  
+test(tt1, 12, True)
 # sys.exit()
 
 INPUT_FILE = "input-d19.txt"

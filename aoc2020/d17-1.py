@@ -1,20 +1,7 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-import copy
-import operator
-import re
 import sys
 import time
 from itertools import product
-
-import numpy as np
 
 # for this puzzle we use a dict indexed by (x,y) for each slice,
 # and a dict indexed by z to store the slices.
@@ -30,19 +17,19 @@ def print_world(world):
 def print_one_slice(xyids, DBG=True):
 
     coords = xyids.keys()
-    if(DBG):
+    if DBG:
         print(xyids)
     x_min = min(coords, key=lambda t: t[0])[0]
     x_max = max(coords, key=lambda t: t[0])[0]
     y_min = min(coords, key=lambda t: t[1])[1]
     y_max = max(coords, key=lambda t: t[1])[1]
 
-    if(DBG):
+    if DBG:
         print(x_min, x_max, y_min, y_max)
 
-    for yy in range(y_min, y_max+1):
+    for yy in range(y_min, y_max + 1):
         ss = ""
-        for xx in range(x_min, x_max+1):
+        for xx in range(x_min, x_max + 1):
             if (xx, yy) in xyids:
                 ss += xyids[(xx, yy)]
             else:
@@ -59,9 +46,9 @@ def create_world(ccc, DBG=True):
         x = -1
         for c in line:
             x += 1
-            if c == '.':
+            if c == ".":
                 continue
-            elif c == '#':
+            elif c == "#":
                 field[(x, y)] = c
             else:
                 print("panic")
@@ -104,14 +91,14 @@ def is_active(world, x, y, z):
 
 
 def set_active(new_world, x, y, z):
-    if not z in new_world:
+    if z not in new_world:
         new_world[z] = {}
-    if not (x, y) in new_world[z]:
-        new_world[z][(x, y)] = '#'
+    if (x, y) not in new_world[z]:
+        new_world[z][(x, y)] = "#"
 
 
 def set_inactive(new_world, x, y, z):
-    if not z in new_world:
+    if z not in new_world:
         return
     if (x, y) in new_world[z]:
         del new_world[z][(x, y)]
@@ -124,7 +111,7 @@ def neighbors(world, x, y, z):
     for (dx, dy, dz) in product([-1, 0, 1], [-1, 0, 1], [-1, 0, 1]):
         if (dx, dy, dz) == (0, 0, 0):
             continue
-        if z+dz in world and (x+dx, y+dy) in world[z+dz]:
+        if z + dz in world and (x + dx, y + dy) in world[z + dz]:
             n = n + 1
     return n
 
@@ -139,13 +126,13 @@ def count_cubes(world):
 def tick(world, x_min, x_max, y_min, y_max, z_min, z_max, DBG=True):
 
     new_world = {}
-    for z in range(z_min-1, z_max+2):
-        for y in range(y_min-1, y_max+2):
-            for x in range(x_min-1, x_max+2):
+    for z in range(z_min - 1, z_max + 2):
+        for y in range(y_min - 1, y_max + 2):
+            for x in range(x_min - 1, x_max + 2):
                 n = neighbors(world, x, y, z)
                 a = is_active(world, x, y, z)
                 if a:
-                    if (n == 2 or n == 3):
+                    if n == 2 or n == 3:
                         set_active(new_world, x, y, z)
                     else:
                         set_inactive(new_world, x, y, z)
@@ -178,10 +165,17 @@ def boom(input_val, DBG=True):
 
     count = 0
 
-    while(True):
-        t = t+1
-        (new_world, new_x_min, new_x_max, new_y_min, new_y_max, new_z_min,
-         new_z_max) = tick(world, x_min, x_max, y_min, y_max, z_min, z_max, DBG)
+    while True:
+        t = t + 1
+        (
+            new_world,
+            new_x_min,
+            new_x_max,
+            new_y_min,
+            new_y_max,
+            new_z_min,
+            new_z_max,
+        ) = tick(world, x_min, x_max, y_min, y_max, z_min, z_max, DBG)
         world = new_world
         x_min = new_x_min
         x_max = new_x_max
@@ -212,14 +206,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

@@ -1,20 +1,7 @@
 # coding: utf-8
-import copy
-import operator
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
 
 import numpy as np
-
-# from functools import reduce
-# from math import log
 
 
 def parse_rule(ii, DBG=True):
@@ -67,8 +54,9 @@ def update_rules_to_field(rules, rule_to_fields, vt, DBG=True):
             (name, l0, h0, l1, h1) = r
             if not ((nn >= l0 and nn <= h0) or (nn >= l1 and nn <= h1)):
                 if DBG:
-                    print("**", name, l0, h0, l1, h1,
-                          "does not match", nn, "at idx", idx)
+                    print(
+                        "**", name, l0, h0, l1, h1, "does not match", nn, "at idx", idx
+                    )
                 if r in rule_to_fields:
                     if idx in rule_to_fields[r]:
                         rule_to_fields[r].remove(idx)
@@ -89,15 +77,15 @@ def boom(input_val, DBG=True):
     idx = 0
     while idx < len(input_val):
         ii = input_val[idx]
-        if (ii == ""):
+        if ii == "":
             ppp = ppp + 1
             idx = idx + 2
             continue
-        if (ppp == 0):
+        if ppp == 0:
             rules.append(parse_rule(ii, DBG))
-        if (ppp == 1):
+        if ppp == 1:
             my_ticket = parse_ticket(ii, DBG)
-        if (ppp == 2):
+        if ppp == 2:
             nearby_tickets.append(parse_ticket(ii, DBG))
         idx = idx + 1
 
@@ -117,9 +105,10 @@ def boom(input_val, DBG=True):
     for vt in valid_tickets:
         rule_to_fields = update_rules_to_field(rules, rule_to_fields, vt, DBG)
 
-    # remove duplicates, by finding rules that have only one possible field and removing it from elsewhere
+    # remove duplicates, by finding rules that have only one possible field
+    # and removing it from elsewhere
     cont = True
-    while(cont):
+    while cont:
         cont = False
         for r in rule_to_fields.keys():
             fields = rule_to_fields[r]
@@ -162,14 +151,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

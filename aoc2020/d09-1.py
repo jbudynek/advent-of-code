@@ -1,61 +1,75 @@
 # coding: utf-8
-import numpy as np
-import re
-import copy
-import sys
-import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
 from itertools import combinations
 
-  
-def boom(input_val, DBG = True):
+import numpy as np
+
+
+def boom(input_val, DBG=True):
 
     numbers = np.asarray(input_val, dtype=np.int)
-    if DBG:print(numbers)
+    if DBG:
+        print(numbers)
 
     window = 25
 
-    for idx in range(window+1,len(numbers)):
-        total = numbers[idx-1]
+    for idx in range(window + 1, len(numbers)):
+        total = numbers[idx - 1]
         found = False
-        if DBG:print("looking for", total)
-        candidates = numbers[idx-window-1:idx-1]
-        if DBG:print("in", candidates)
+        if DBG:
+            print("looking for", total)
+        candidates = numbers[idx - window - 1 : idx - 1]  # noqa
+        if DBG:
+            print("in", candidates)
 
-        for (p,q) in combinations(candidates,2):
-            if (p+q) == total:
+        for (p, q) in combinations(candidates, 2):
+            if (p + q) == total:
                 found = True
-                if DBG:print("found", p, q)
+                if DBG:
+                    print("found", p, q)
                 continue
-        if found: 
+        if found:
             continue
         else:
-            if DBG:print("total not found")
+            if DBG:
+                print("total not found")
             return total
- 
-    return (-1)
 
-def test(cc=None, expected=None, DBG = False):
+    return -1
+
+
+def test(cc=None, expected=None, DBG=False):
     start_millis = int(round(time.time() * 1000))
-    result = boom(cc,DBG)
+    result = boom(cc, DBG)
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected=="None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))    
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result)+ " -> success = "+ str(flag) + " -> expected " + expected)    
-    print((stop_millis-start_millis),"ms",int((stop_millis-start_millis)/1000),"s",int((stop_millis-start_millis)/1000/60),"min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 
-t1="""35
+t1 = """35
 20
 15
 25
@@ -76,17 +90,17 @@ t1="""35
 309
 576"""
 tt1 = t1.splitlines()
-#test(tt1,127,True)
-#sys.exit()
+# test(tt1,127,True)
+# sys.exit()
 
 
-INPUT_FILE="input-d09.txt"
+INPUT_FILE = "input-d09.txt"
 f = open(INPUT_FILE, "r")
 contents = f.read()
 puzzle_input = contents.splitlines()
 f.close()
 
-ret = boom(puzzle_input, False) 
+ret = boom(puzzle_input, False)
 print(ret)
 
 # part 1 = 257342611

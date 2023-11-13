@@ -1,21 +1,11 @@
 # coding: utf-8
-import copy
-import operator
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
 from functools import reduce
-from math import log
 
 import numpy as np
 
-# The hardest part of this puzzle is to figure out that it can be solved using the Chinese remainder theorem.
+# The hardest part of this puzzle is to figure out that it can be solved using
+# the Chinese remainder theorem.
 # https://en.wikipedia.org/wiki/Chinese_remainder_theorem
 
 # En français : théorème des restes chinois
@@ -27,7 +17,7 @@ import numpy as np
 
 def chinese_remainder(n, a):
     sum = 0
-    prod = reduce(lambda a, b: a*b, n)
+    prod = reduce(lambda a, b: a * b, n)
     for n_i, a_i in zip(n, a):
         p = prod // n_i
         sum += a_i * mul_inv(p, n_i) * p
@@ -51,7 +41,7 @@ def mul_inv(a, b):
 def boom(input_val, DBG=True):
 
     # build the list of buses, and the list of expected deltas between them
-    dummy = int(input_val[0])
+    # dummy = int(input_val[0])
     buses = input_val[1].replace("x", "0").split(",")
     if DBG:
         print(buses)
@@ -66,14 +56,14 @@ def boom(input_val, DBG=True):
 
     b = np.append(b, buses[lhs_id])
 
-    while(rhs_id < nb_buses):
-        while (buses[rhs_id] == 0):
+    while rhs_id < nb_buses:
+        while buses[rhs_id] == 0:
             rhs_id = rhs_id + 1
-        delta = rhs_id-lhs_id
+        delta = rhs_id - lhs_id
         d = np.append(d, delta)
         b = np.append(b, buses[rhs_id])
         lhs_id = rhs_id
-        rhs_id = lhs_id+1
+        rhs_id = lhs_id + 1
 
     if DBG:
         print(b, d)
@@ -97,14 +87,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

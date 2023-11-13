@@ -1,15 +1,5 @@
 # coding: utf-8
-import copy
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
-import numpy as np
 
 
 def parse_instruction(instruction, DBG=True):
@@ -22,25 +12,25 @@ def process_instruction(z, direction, action, value, DBG):
     new_direction = direction
     new_z = z
     # turn the ship
-    if (action == "R"):
+    if action == "R":
         quarter = value // 90
         new_direction = direction * ((-1j) ** quarter)
-    elif (action == "L"):
+    elif action == "L":
         quarter = value // 90
         new_direction = direction * ((1j) ** quarter)
     # move the ship forward
-    elif (action == "F"):
+    elif action == "F":
         new_z = z + direction * value
     # move the ship in cardinal directions
-    elif (action == "N"):
+    elif action == "N":
         new_z = z + 1j * value
-    elif (action == "S"):
+    elif action == "S":
         new_z = z - 1j * value
-    elif (action == "W"):
+    elif action == "W":
         new_z = z - 1 * value
-    elif (action == "E"):
+    elif action == "E":
         new_z = z + 1 * value
-    return(new_z, new_direction)
+    return (new_z, new_direction)
 
 
 def boom(input_val, DBG=True):
@@ -55,13 +45,14 @@ def boom(input_val, DBG=True):
         if DBG:
             print(action, value)
         (new_z, new_direction) = process_instruction(
-            cur_z, cur_direction, action, value, DBG)
+            cur_z, cur_direction, action, value, DBG
+        )
         if DBG:
             print(new_z, new_direction)
         cur_z = new_z
         cur_direction = new_direction
 
-    manhattan = int(abs(cur_z.real)+abs(cur_z.imag))
+    manhattan = int(abs(cur_z.real) + abs(cur_z.imag))
     return manhattan
 
 
@@ -71,14 +62,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

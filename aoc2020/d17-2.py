@@ -1,22 +1,10 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-import copy
-import operator
-import re
 import sys
 import time
 from itertools import product
 
-import numpy as np
-
-# ok for dimension 4 let's use a dict indexed by (x,y,z,w) - that idea would have worked with dimension 3 also.
+# ok for dimension 4 let's use a dict indexed by (x,y,z,w)
+# (that idea would have worked with dimension 3 also.)
 
 
 def create_world(ccc, DBG=True):
@@ -28,9 +16,9 @@ def create_world(ccc, DBG=True):
         x = -1
         for c in line:
             x += 1
-            if c == '.':
+            if c == ".":
                 continue
-            elif c == '#':
+            elif c == "#":
                 field[(x, y, 0, 0)] = c
             else:
                 print("panic")
@@ -65,8 +53,8 @@ def is_active(world, x, y, z, w):
 
 
 def set_active(new_world, x, y, z, w):
-    if not (x, y, z, w) in new_world:
-        new_world[(x, y, z, w)] = '#'
+    if (x, y, z, w) not in new_world:
+        new_world[(x, y, z, w)] = "#"
 
 
 def set_inactive(new_world, x, y, z, w):
@@ -79,7 +67,7 @@ def neighbors(world, x, y, z, w):
     for (dx, dy, dz, dw) in product([-1, 0, 1], [-1, 0, 1], [-1, 0, 1], [-1, 0, 1]):
         if (dx, dy, dz, dw) == (0, 0, 0, 0):
             continue
-        if (x+dx, y+dy, z+dz, w+dw) in world:
+        if (x + dx, y + dy, z + dz, w + dw) in world:
             n = n + 1
     return n
 
@@ -91,14 +79,14 @@ def count_cubes(world):
 
 def tick(world, x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max, DBG=True):
     new_world = {}
-    for w in range(w_min-1, w_max+2):
-        for z in range(z_min-1, z_max+2):
-            for y in range(y_min-1, y_max+2):
-                for x in range(x_min-1, x_max+2):
+    for w in range(w_min - 1, w_max + 2):
+        for z in range(z_min - 1, z_max + 2):
+            for y in range(y_min - 1, y_max + 2):
+                for x in range(x_min - 1, x_max + 2):
                     n = neighbors(world, x, y, z, w)
                     a = is_active(world, x, y, z, w)
                     if a:
-                        if (n == 2 or n == 3):
+                        if n == 2 or n == 3:
                             set_active(new_world, x, y, z, w)
                         else:
                             set_inactive(new_world, x, y, z, w)
@@ -108,8 +96,9 @@ def tick(world, x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max, DBG=True
                         else:
                             set_inactive(new_world, x, y, z, w)
 
-    (x_min, x_max, y_min, y_max, z_min, z_max,
-     w_min, w_max) = get_world_bounds(new_world)
+    (x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max) = get_world_bounds(
+        new_world
+    )
     return (new_world, x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max)
 
 
@@ -118,8 +107,7 @@ def boom(input_val, DBG=True):
     # parse world
     world = create_world(input_val, DBG)
 
-    (x_min, x_max, y_min, y_max, z_min, z_max,
-     w_min, w_max) = get_world_bounds(world)
+    (x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max) = get_world_bounds(world)
 
     max_tick = 6
 
@@ -129,10 +117,19 @@ def boom(input_val, DBG=True):
 
     count = 0
 
-    while(True):
-        t = t+1
-        (new_world, new_x_min, new_x_max, new_y_min, new_y_max, new_z_min,
-         new_z_max, new_w_min, new_w_max) = tick(world, x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max, DBG)
+    while True:
+        t = t + 1
+        (
+            new_world,
+            new_x_min,
+            new_x_max,
+            new_y_min,
+            new_y_max,
+            new_z_min,
+            new_z_max,
+            new_w_min,
+            new_w_max,
+        ) = tick(world, x_min, x_max, y_min, y_max, z_min, z_max, w_min, w_max, DBG)
         world = new_world
         x_min = new_x_min
         x_max = new_x_max
@@ -148,7 +145,7 @@ def boom(input_val, DBG=True):
         if DBG:
             print("tick=", t, "count=", count_new)
 
-        if (count_new == count):
+        if count_new == count:
             print("***TICK", t, "***", count_new, "stable")
             break
 
@@ -169,14 +166,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

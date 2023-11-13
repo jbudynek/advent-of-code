@@ -1,15 +1,5 @@
 # coding: utf-8
-import copy
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
 import time
-import numpy as np
 
 
 def parse_instruction(instruction, DBG=True):
@@ -22,25 +12,25 @@ def process_instruction(z, waypoint, action, value, DBG):
     new_z = z
     new_waypoint = waypoint
     # rotate the waypoint
-    if (action == "R"):
+    if action == "R":
         quarter = value // 90
         new_waypoint = waypoint * ((-1j) ** quarter)
-    elif (action == "L"):
+    elif action == "L":
         quarter = value // 90
         new_waypoint = waypoint * ((1j) ** quarter)
     # move ship forward along the waypoint
-    elif (action == "F"):
+    elif action == "F":
         new_z = z + waypoint * value
     # update waypoint along cardinal directions
-    elif (action == "N"):
+    elif action == "N":
         new_waypoint = waypoint + 1j * value
-    elif (action == "S"):
+    elif action == "S":
         new_waypoint = waypoint - 1j * value
-    elif (action == "W"):
+    elif action == "W":
         new_waypoint = waypoint - 1 * value
-    elif (action == "E"):
+    elif action == "E":
         new_waypoint = waypoint + 1 * value
-    return(new_z, new_waypoint)
+    return (new_z, new_waypoint)
 
 
 def boom(input_val, DBG=True):
@@ -55,15 +45,16 @@ def boom(input_val, DBG=True):
         if DBG:
             print(action, value)
         (new_z, new_waypoint) = process_instruction(
-            cur_z, cur_waypoint, action, value, DBG)
+            cur_z, cur_waypoint, action, value, DBG
+        )
         if DBG:
             print(new_z, new_waypoint)
 
-        #aa = input()
+        # aa = input()
         cur_z = new_z
         cur_waypoint = new_waypoint
 
-    manhattan = int(abs(cur_z.real)+abs(cur_z.imag))
+    manhattan = int(abs(cur_z.real) + abs(cur_z.imag))
     return manhattan
 
 
@@ -73,14 +64,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

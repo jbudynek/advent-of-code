@@ -1,23 +1,5 @@
 # coding: utf-8
-# import networkx as nx
-# import matplotlib.pyplot as plt
-# import operator
-# from collections import defaultdict
-# from collections import Counter
-# from functools import reduce
-# from math import log
-# from itertools import combinations, permutations, product
-# from collections import deque
-import copy
-import operator
-import re
-import string
-import sys
-import time
-from enum import Enum
 from timeit import default_timer as timer
-
-import numpy as np
 
 
 def next_value(value, subject_number):
@@ -32,7 +14,7 @@ def find_loop_size(pk, DBG):
     value = 1
     subject_number = 7
 
-    while(True):
+    while True:
         nb_loop = nb_loop + 1
         value = next_value(value, subject_number)
         if value == pk:
@@ -48,6 +30,7 @@ def apply_loop_size(pk, loop_size, DBG):
         value = next_value(value, pk)
 
     return value
+
 
 ################
 
@@ -67,18 +50,19 @@ def boom(input_val, DBG=True):
 
     return handshake_card
 
+
 ########################
 
 
 def print_time(t_start, t_end):
-    s = t_end-t_start
-    print(int(s*1000), "ms = ", int(s), "s = ", int(s/60), "min")
+    s = t_end - t_start
+    print(int(s * 1000), "ms = ", int(s), "s = ", int(s / 60), "min")
 
 
-RED_FG = '\x1b[91m'
-GREEN_FG = '\x1b[92m'
-YELLOW_FG = '\x1b[93m'
-DEFAULT_FG = '\x1b[39m'
+RED_FG = "\x1b[91m"
+GREEN_FG = "\x1b[92m"
+YELLOW_FG = "\x1b[93m"
+DEFAULT_FG = "\x1b[39m"
 
 
 def test(cc=None, expected=None, DBG=False):
@@ -89,20 +73,30 @@ def test(cc=None, expected=None, DBG=False):
 
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
+    flag = result == expected
     sflag = ""
-    if flag == True:
-        sflag = GREEN_FG+str(flag)+DEFAULT_FG
+    if flag:
+        sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
-        sflag = RED_FG+str(flag)+DEFAULT_FG
+        sflag = RED_FG + str(flag) + DEFAULT_FG
 
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + sflag + " -> expected " + expected)
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + sflag
+            + " -> expected "
+            + expected
+        )
     print_time(t_start, t_end)
     return flag
+
+
 #######
 
 

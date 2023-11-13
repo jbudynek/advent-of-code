@@ -1,25 +1,10 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-import copy
-import operator
-import re
-import sys
 import time
-from itertools import product
 from operator import add, mul
 
-import numpy as np
-
 operators = {
-    '+': add,
-    '*': mul,
+    "+": add,
+    "*": mul,
 }
 
 
@@ -28,9 +13,9 @@ def find_parens(s):
     pstack = []
 
     for i, c in enumerate(s):
-        if c == '(':
+        if c == "(":
             pstack.append(i)
-        elif c == ')':
+        elif c == ")":
             ret[pstack.pop()] = i
 
     return ret
@@ -44,25 +29,25 @@ def calculate(s, DBG=True):
 
     lhs = 0
     ret = 0
-    operator = '+'
+    operator = "+"
     i = 0
     while i < len(s):
         if s[i].isdigit():
             lhs = int(s[i])
             ret = operators[operator](ret, lhs)
-            i = i+1
+            i = i + 1
         elif s[i] in operators.keys():
             operator = s[i]
-            i = i+1
-        elif s[i] == '(':
-            ss = s[i+1:parens[i]]
+            i = i + 1
+        elif s[i] == "(":
+            ss = s[i + 1 : parens[i]]  # noqa
             if DBG:
                 print(ss)
             lhs = calculate(ss, DBG)
             ret = operators[operator](ret, lhs)
             i = parens[i] + 1
-        elif s[i] == ' ':
-            i = i+1
+        elif s[i] == " ":
+            i = i + 1
             pass
     return ret
 
@@ -83,14 +68,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

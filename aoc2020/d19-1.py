@@ -1,17 +1,5 @@
 # coding: utf-8
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-# from functools import reduce
-# from math import log
-#from itertools import product
-import copy
-import operator
 import re
-import string
 import sys
 import time
 
@@ -24,28 +12,28 @@ def parse_rules_and_messages(input_val, DBG):
     nl = len(input_val)
     idx = 0
     part = 0
-    while(idx < nl):
+    while idx < nl:
         ii = input_val[idx]
-        if ii == '':
-            part = part+1
+        if ii == "":
+            part = part + 1
         elif part == 0:
             rr = ii.split(":")
             nr = int(rr[0])
-            if '|' in rr[1]:
+            if "|" in rr[1]:
                 rrr = rr[1].split("|")
-                lhs = np.asarray(re.findall(r'\d+', rrr[0]), dtype=np.int)
-                rhs = np.asarray(re.findall(r'\d+', rrr[1]), dtype=np.int)
+                lhs = np.asarray(re.findall(r"\d+", rrr[0]), dtype=np.int)
+                rhs = np.asarray(re.findall(r"\d+", rrr[1]), dtype=np.int)
                 rules[nr] = (lhs, rhs)
             elif '"' in rr[1]:
                 rules[nr] = rr[1][2]
             else:
-                lhs = np.asarray(re.findall(r'\d+', rr[1]), dtype=np.int)
+                lhs = np.asarray(re.findall(r"\d+", rr[1]), dtype=np.int)
                 rules[nr] = lhs
         elif part == 1:
             messages.append(ii)
         else:
-            sys.exit("panic "+str(ii))
-        idx = idx+1
+            sys.exit("panic " + str(ii))
+        idx = idx + 1
 
     if DBG:
         print(rules)
@@ -57,20 +45,27 @@ def match(message, m_pos, rules, r_idx, DBG):
     r = rules[r_idx]
     if m_pos >= len(message):
         if DBG:
-            print("too far!! test rule#", r_idx, "=", r, "m_pos=",
-                  m_pos)
+            print("too far!! test rule#", r_idx, "=", r, "m_pos=", m_pos)
         return (False, m_pos)
     if DBG:
-        print("test rule#", r_idx, "=", r, "m_pos=",
-              m_pos, "message[m_pos]", message[m_pos])
+        print(
+            "test rule#",
+            r_idx,
+            "=",
+            r,
+            "m_pos=",
+            m_pos,
+            "message[m_pos]",
+            message[m_pos],
+        )
     if isinstance(r, str):  # character
-        ret = (r == message[m_pos])
+        ret = r == message[m_pos]
         if DBG:
             if ret:
                 print("match char rule ", r_idx)
             else:
                 print("no match char rule ", r_idx)
-        return (ret, m_pos+1)
+        return (ret, m_pos + 1)
     elif isinstance(r, tuple):  # N rules | P rules
 
         # test first set of N rules
@@ -91,7 +86,7 @@ def match(message, m_pos, rules, r_idx, DBG):
         if DBG:
             if DBG:
                 print("no match | rule ", r_idx)
-        return(False, m_pos)
+        return (False, m_pos)
 
     else:  # N rules
         (ret_b, ret_p) = test_n_rules(message, r, r_idx, m_pos, rules, DBG)
@@ -110,7 +105,7 @@ def match(message, m_pos, rules, r_idx, DBG):
 def test_n_rules(message, r, r_idx, m_pos, rules, DBG):
     rrr = 0
     cur_m_pos = m_pos
-    while(rrr < len(r)):
+    while rrr < len(r):
         mm1 = False
         (mm1, new_m_pos) = match(message, cur_m_pos, rules, r[rrr], DBG)
         if not mm1:
@@ -151,14 +146,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 

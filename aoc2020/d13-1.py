@@ -1,15 +1,7 @@
 # coding: utf-8
-import copy
-import re
-import sys
-#import networkx as nx
-#import matplotlib.pyplot as plt
-#import operator
-#from collections import defaultdict
-#from collections import Counter
-#from collections import deque
-import time
 import operator
+import time
+
 import numpy as np
 
 
@@ -24,8 +16,8 @@ def boom(input_val, DBG=True):
     for bus_id in buses:
         if bus_id == 0:
             continue
-        next_available_departure = earliest_tmst//bus_id * bus_id + bus_id
-        deltas[bus_id] = next_available_departure-earliest_tmst
+        next_available_departure = earliest_tmst // bus_id * bus_id + bus_id
+        deltas[bus_id] = next_available_departure - earliest_tmst
         if DBG:
             print(bus_id, next_available_departure, deltas[bus_id])
 
@@ -41,14 +33,28 @@ def test(cc=None, expected=None, DBG=False):
     stop_millis = int(round(time.time() * 1000))
     result = str(result)
     expected = str(expected)
-    flag = (result == expected)
-    if(expected == "None"):
-        print("*** "+str(cc) + " *** -> Result = "+str(result))
+    flag = result == expected
+    if expected == "None":
+        print("*** " + str(cc) + " *** -> Result = " + str(result))
     else:
-        print("*** "+str(cc) + " *** -> Result = "+str(result) +
-              " -> success = " + str(flag) + " -> expected " + expected)
-    print((stop_millis-start_millis), "ms", int((stop_millis-start_millis) /
-                                                1000), "s", int((stop_millis-start_millis)/1000/60), "min")
+        print(
+            "*** "
+            + str(cc)
+            + " *** -> Result = "
+            + str(result)
+            + " -> success = "
+            + str(flag)
+            + " -> expected "
+            + expected
+        )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
     return flag
 
 
