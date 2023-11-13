@@ -1,20 +1,12 @@
-
 # coding: utf-8
 
 # In[9]:
 
 
-import numpy as np
-import re
-import copy
-import sys
-import networkx as nx
-import matplotlib.pyplot as plt
-import operator
-from collections import defaultdict
 import time
+from collections import defaultdict
 
-
+import numpy as np
 
 puzzle_input = """1 GZJM, 2 CQFGM, 20 SNPQ, 7 RVQG, 3 FBTV, 27 SQLH, 10 HFGCF, 3 ZQCH => 3 SZCN
 4 FCDL, 6 NVPW, 21 GZJM, 1 FBTV, 1 NLSNB, 7 HFGCF, 3 SNPQ => 1 LRPK
@@ -70,89 +62,109 @@ puzzle_input = """1 GZJM, 2 CQFGM, 20 SNPQ, 7 RVQG, 3 FBTV, 27 SQLH, 10 HFGCF, 3
 3 SQLH, 22 LBQV, 5 BCVLZ => 6 PRKPC
 1 WZJB => 2 GZJM
 10 ZGZST => 2 LWBQ
-5 TBDH, 19 NXNR, 9 QLHKT, 2 KDJV, 1 SQLH, 1 GWBDR, 6 HFGCF => 4 BWTHK"""
+5 TBDH, 19 NXNR, 9 QLHKT, 2 KDJV, 1 SQLH, 1 GWBDR, 6 HFGCF => 4 BWTHK"""  # noqa
 
 
 # In[164]:
 
 
-
 def build_world(ccc, DBG=True):
-    if(DBG): print("build_world")
-    reactions={}
-    idx=0
+    if DBG:
+        print("build_world")
+    reactions = {}
+    idx = 0
     for line in ccc.splitlines():
-        if(DBG): print("line",line)
-        lhs = line.split(' => ')[0] 
-        rhs = line.split(' => ')[1] 
-        nk = rhs.strip().split(' ')
+        if DBG:
+            print("line", line)
+        lhs = line.split(" => ")[0]
+        rhs = line.split(" => ")[1]
+        nk = rhs.strip().split(" ")
         nn = int(nk[0])
         kk = nk[1]
-        reactions[kk]= [nn]
-        if (DBG): print("nn,kk",nn,kk)
+        reactions[kk] = [nn]
+        if DBG:
+            print("nn,kk", nn, kk)
 
-        rr = lhs.split(',')
+        rr = lhs.split(",")
         for r in rr:
-            nk = r.strip().split(' ')
+            nk = r.strip().split(" ")
             n = int(nk[0])
             k = nk[1]
-            reactions[kk].append((n,k))
-            if (DBG): print("n,k",n,k)
+            reactions[kk].append((n, k))
+            if DBG:
+                print("n,k", n, k)
         idx += 1
-    if (DBG): print("reactions",reactions)
-    return reactions    
+    if DBG:
+        print("reactions", reactions)
+    return reactions
 
-def run_loop(how_many, target, reactions, DBG=True):    
-    if (DBG): print("run_loop", how_many, target, reactions)
 
-    chem_to_how_many=defaultdict(int)
+def run_loop(how_many, target, reactions, DBG=True):
+    if DBG:
+        print("run_loop", how_many, target, reactions)
+
+    chem_to_how_many = defaultdict(int)
     chem_to_how_many[target] = how_many
 
-    while (1):
+    while 1:
         done = True
         kkk = list(chem_to_how_many.keys())
         for chem in kkk:
-            if chem=='ORE' or chem_to_how_many[chem]<=0:continue
+            if chem == "ORE" or chem_to_how_many[chem] <= 0:
+                continue
             done = False
             how_many = chem_to_how_many[chem]
             chems_to_use = reactions[chem]
-            multiplier = int(np.ceil(how_many/chems_to_use[0]))
+            multiplier = int(np.ceil(how_many / chems_to_use[0]))
             chem_to_how_many[chem] -= multiplier * chems_to_use[0]
 
-            for n_k in range(1,len(chems_to_use)):
+            for n_k in range(1, len(chems_to_use)):
                 how_much_of_chem_source = chems_to_use[n_k][0]
                 chem_source = chems_to_use[n_k][1]
 
                 chem_to_how_many[chem_source] += multiplier * how_much_of_chem_source
-        if (DBG):print(chem_to_how_many)
-        if (done):break
-    return chem_to_how_many['ORE']
-
+        if DBG:
+            print(chem_to_how_many)
+        if done:
+            break
+    return chem_to_how_many["ORE"]
 
 
 def function(reactions, DBG=True):
-    
+
     # formula
     # 1 A 2 B -> 3 C
     # reaction['C'] = [3, (1, 'A'), (2, 'B')]
-    
-    total_ores = run_loop(1,'FUEL',reactions,DBG)
-    
-    if (DBG): print("total_ores",total_ores)     
+
+    total_ores = run_loop(1, "FUEL", reactions, DBG)
+
+    if DBG:
+        print("total_ores", total_ores)
 
     return total_ores
 
-def test(cc=None, expected=None, DBG = False):
+
+def test(cc=None, expected=None, DBG=False):
 
     start_millis = int(round(time.time() * 1000))
-    world = build_world(cc,DBG)
-    result = str(function(world,DBG))
+    world = build_world(cc, DBG)
+    result = str(function(world, DBG))
     stop_millis = int(round(time.time() * 1000))
 
     expected = str(expected)
-    flag = (result == expected)
-    print("***"+str(cc) + " -> "+str(result), " -> "+ str(flag) + " vs " + expected)    
-    print((stop_millis-start_millis),"ms",int((stop_millis-start_millis)/1000),"s",int((stop_millis-start_millis)/1000/60),"min")
+    flag = result == expected
+    print(
+        "***" + str(cc) + " -> " + str(result), " -> " + str(flag) + " vs " + expected
+    )
+    print(
+        (stop_millis - start_millis),
+        "ms",
+        int((stop_millis - start_millis) / 1000),
+        "s",
+        int((stop_millis - start_millis) / 1000 / 60),
+        "min",
+    )
+
 
 # In[166]:
 
@@ -164,7 +176,7 @@ t1 = """10 ORE => 10 A
 7 A, 1 D => 1 E
 7 A, 1 E => 1 FUEL"""
 
-test(t1,31,False) 
+test(t1, 31, False)
 
 t2 = """9 ORE => 2 A
 8 ORE => 3 B
@@ -174,10 +186,10 @@ t2 = """9 ORE => 2 A
 4 C, 1 A => 1 CA
 2 AB, 3 BC, 4 CA => 1 FUEL"""
 
-test(t2,165,False) 
+test(t2, 165, False)
 
 
-t3="""157 ORE => 5 NZVS
+t3 = """157 ORE => 5 NZVS
 165 ORE => 6 DCFZ
 44 XJWVT, 5 KHKGT, 1 QDVJ, 29 NZVS, 9 GPVTF, 48 HKGWZ => 1 FUEL
 12 HKGWZ, 1 GPVTF, 8 PSHF => 9 QDVJ
@@ -187,9 +199,9 @@ t3="""157 ORE => 5 NZVS
 165 ORE => 2 GPVTF
 3 DCFZ, 7 NZVS, 5 HKGWZ, 10 PSHF => 8 KHKGT"""
 
-test(t3,13312,False) 
+test(t3, 13312, False)
 
-t4="""2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
+t4 = """2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
 17 NVRVD, 3 JNWZP => 8 VPVL
 53 STKFG, 6 MNCFX, 46 VJHF, 81 HVMC, 68 CXFTF, 25 GNMV => 1 FUEL
 22 VJHF, 37 MNCFX => 5 FWMGM
@@ -202,9 +214,9 @@ t4="""2 VPVL, 7 FWMGM, 2 CXFTF, 11 MNCFX => 1 STKFG
 1 VJHF, 6 MNCFX => 4 RFSQX
 176 ORE => 6 VJHF"""
 
-test(t4,180697,False) 
+test(t4, 180697, False)
 
-t5="""171 ORE => 8 CNZTR
+t5 = """171 ORE => 8 CNZTR
 7 ZLQW, 3 BMBT, 9 XCVML, 26 XMNCP, 1 WPTQ, 2 MZWV, 1 RJRHP => 4 PLWSL
 114 ORE => 4 BHXH
 14 VRPVC => 6 BMBT
@@ -222,11 +234,10 @@ t5="""171 ORE => 8 CNZTR
 7 XCVML => 6 RJRHP
 5 BHXH, 4 VRPVC => 5 LTCX"""
 
-test(t5,2210736,False) 
+test(t5, 2210736, False)
 
 
 # In[14]:
 
 
-test(puzzle_input,0,False)
-
+test(puzzle_input, 0, False)
