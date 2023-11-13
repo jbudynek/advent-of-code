@@ -2,7 +2,7 @@
 import string
 from functools import reduce
 
-from boilerplate import *
+from boilerplate import run_func, test_func
 
 # Main function
 ##########

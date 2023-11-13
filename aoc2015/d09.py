@@ -1,7 +1,8 @@
 # coding: utf-8
-import networkx as nx
 import itertools
 from timeit import default_timer as timer
+
+import networkx as nx
 
 # Main function
 ##########
@@ -59,7 +60,7 @@ def output_test(cc, t_start, t_end, result, expected):
     expected = str(expected)
     flag = result == expected
     sflag = ""
-    if flag == True:
+    if flag:
         sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
         sflag = RED_FG + str(flag) + DEFAULT_FG
@@ -104,7 +105,7 @@ def test_part2(cc=None, expected=None, DBG=False):
 tt1 = """London to Dublin = 464
 London to Belfast = 518
 Dublin to Belfast = 141"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_part1(tt1, 605, True)
 test_part2(tt1, 982, True)
 # sys.exit()

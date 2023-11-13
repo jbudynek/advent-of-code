@@ -5,9 +5,9 @@ from timeit import default_timer as timer
 ##########
 
 
-def step(l):
+def step(line):
     ret = ""
-    len_l = len(l)
+    len_l = len(line)
     i = 0
     while i < len_l:
         found = False
@@ -16,7 +16,7 @@ def step(l):
                 for nnn in range(9, 0, -1):
                     if not found:
                         lookup = nn * str(nnn)
-                        if (i + nn <= len_l) and (l[i : i + nn] == lookup):
+                        if (i + nn <= len_l) and (line[i : i + nn] == lookup):  # noqa
                             ret += str(nn) + str(nnn)
                             i = i + nn
                             found = True
@@ -25,23 +25,23 @@ def step(l):
 
 def boom_part1(input_val, DBG=True):
 
-    l = input_val
+    line = input_val
     for i in range(40):
-        l = step(l)
+        line = step(line)
         if DBG and i < 10:
-            print(l)
+            print(line)
 
-    return len(l)
+    return len(line)
 
 
 def boom_part2(input_val, DBG=True):
-    l = input_val
+    line = input_val
     for i in range(50):
-        l = step(l)
+        line = step(line)
         if DBG and i < 10:
-            print(l)
+            print(line)
 
-    return len(l)
+    return len(line)
 
 
 # Testing and timing
@@ -64,7 +64,7 @@ def output_test(cc, t_start, t_end, result, expected):
     expected = str(expected)
     flag = result == expected
     sflag = ""
-    if flag == True:
+    if flag:
         sflag = GREEN_FG + str(flag) + DEFAULT_FG
     else:
         sflag = RED_FG + str(flag) + DEFAULT_FG

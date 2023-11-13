@@ -1,8 +1,10 @@
 # coding: utf-8
-import re
 import json
+import re
+
 import numpy as np
-from boilerplate import *
+from boilerplate import read_input_file, run_func, test_func
+
 
 # Main function
 ##########
@@ -48,7 +50,7 @@ def boom_part2(input_val, DBG=True):
 ##########
 
 tt1 = '[1,{"c":"red","b":2},3]'
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_func(boom_part1, tt1, 6, True)
 test_func(boom_part2, tt1, 4, True)
 # sys.exit()

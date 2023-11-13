@@ -1,6 +1,7 @@
 # coding: utf-8
-from boilerplate import *
 import itertools
+
+from boilerplate import read_input_file, run_func, test_func
 
 # Main function
 ##########
@@ -70,7 +71,7 @@ Carol would gain 55 happiness units by sitting next to David.
 David would gain 46 happiness units by sitting next to Alice.
 David would lose 7 happiness units by sitting next to Bob.
 David would gain 41 happiness units by sitting next to Carol."""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_func(boom_part1, tt1, 330, True)
 
 # Real data
