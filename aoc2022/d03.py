@@ -1,5 +1,5 @@
 # coding: utf-8
-from boilerplate import *
+from boilerplate import read_input_file, run_func, test_func
 
 # Main function
 ##########
@@ -22,8 +22,8 @@ def get_priority(c):
 def boom_part1(input_val, DBG=True):
     priorities = []
     for rucksack in input_val:
-        left = rucksack[0 : len(rucksack) // 2]
-        right = rucksack[len(rucksack) // 2 :]
+        left = rucksack[0 : len(rucksack) // 2]  # noqa
+        right = rucksack[len(rucksack) // 2 :]  # noqa
         common = get_common_item([left, right])
         priorities.append(get_priority(common))
     return sum(priorities)
@@ -47,7 +47,7 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore # type: ignore
 test_func(boom_part1, tt1, 157, True)
 test_func(boom_part2, tt1, 70, True)
 # sys.exit()

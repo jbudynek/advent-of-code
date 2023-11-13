@@ -1,5 +1,5 @@
 # coding: utf-8
-from boilerplate import *
+from boilerplate import read_input_file, run_func, test_func
 
 # Main function
 ##########
@@ -49,7 +49,7 @@ def boom_part2(input_val, DBG=True):
 tt1 = """A Y
 B X
 C Z"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_func(boom_part1, tt1, 15, True)
 test_func(boom_part2, tt1, 12, True)
 

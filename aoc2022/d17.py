@@ -20,40 +20,40 @@ BE = 3
 
 def test_free_left(field, cur_block, cur_x, cur_y):
     if cur_block == "-":
-        if not (cur_x - 1, cur_y) in field:
+        if (cur_x - 1, cur_y) not in field:
             return True
         else:
             return False
     elif cur_block == "+":
         if (
-            not (cur_x, cur_y) in field
-            and not (cur_x - 1, cur_y - 1) in field
-            and not (cur_x, cur_y - 2) in field
+            (cur_x, cur_y) not in field
+            and (cur_x - 1, cur_y - 1) not in field
+            and (cur_x, cur_y - 2) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "L":
         if (
-            not (cur_x + 1, cur_y) in field
-            and not (cur_x + 1, cur_y - 1) in field
-            and not (cur_x - 1, cur_y - 2) in field
+            (cur_x + 1, cur_y) not in field
+            and (cur_x + 1, cur_y - 1) not in field
+            and (cur_x - 1, cur_y - 2) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "|":
         if (
-            not (cur_x - 1, cur_y) in field
-            and not (cur_x - 1, cur_y - 1) in field
-            and not (cur_x - 1, cur_y - 2) in field
-            and not (cur_x - 1, cur_y - 3) in field
+            (cur_x - 1, cur_y) not in field
+            and (cur_x - 1, cur_y - 1) not in field
+            and (cur_x - 1, cur_y - 2) not in field
+            and (cur_x - 1, cur_y - 3) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "o":
-        if not (cur_x - 1, cur_y) in field and not (cur_x - 1, cur_y - 1) in field:
+        if (cur_x - 1, cur_y) in field and not (cur_x - 1, cur_y - 1) not in field:
             return True
         else:
             return False
@@ -65,40 +65,40 @@ def test_free_left(field, cur_block, cur_x, cur_y):
 
 def test_free_right(field, cur_block, cur_x, cur_y):
     if cur_block == "-":
-        if not (cur_x + 4, cur_y) in field:
+        if (cur_x + 4, cur_y) not in field:
             return True
         else:
             return False
     elif cur_block == "+":
         if (
-            not (cur_x + 2, cur_y) in field
-            and not (cur_x + 3, cur_y - 1) in field
-            and not (cur_x + 2, cur_y - 2) in field
+            (cur_x + 2, cur_y) not in field
+            and (cur_x + 3, cur_y - 1) not in field
+            and (cur_x + 2, cur_y - 2) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "L":
         if (
-            not (cur_x + 3, cur_y) in field
-            and not (cur_x + 3, cur_y - 1) in field
-            and not (cur_x + 3, cur_y - 2) in field
+            (cur_x + 3, cur_y) not in field
+            and (cur_x + 3, cur_y - 1) not in field
+            and (cur_x + 3, cur_y - 2) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "|":
         if (
-            not (cur_x + 1, cur_y) in field
-            and not (cur_x + 1, cur_y - 1) in field
-            and not (cur_x + 1, cur_y - 2) in field
-            and not (cur_x + 1, cur_y - 3) in field
+            (cur_x + 1, cur_y) not in field
+            and (cur_x + 1, cur_y - 1) not in field
+            and (cur_x + 1, cur_y - 2) not in field
+            and (cur_x + 1, cur_y - 3) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "o":
-        if not (cur_x + 2, cur_y) in field and not (cur_x + 2, cur_y - 1) in field:
+        if (cur_x + 2, cur_y) in field and not (cur_x + 2, cur_y - 1) not in field:
             return True
         else:
             return False
@@ -111,39 +111,39 @@ def test_free_right(field, cur_block, cur_x, cur_y):
 def test_free_down(field, cur_block, cur_x, cur_y):
     if cur_block == "-":
         if (
-            not (cur_x, cur_y - 1) in field
-            and not (cur_x + 1, cur_y - 1) in field
-            and not (cur_x + 2, cur_y - 1) in field
-            and not (cur_x + 3, cur_y - 1) in field
+            (cur_x, cur_y - 1) not in field
+            and (cur_x + 1, cur_y - 1) not in field
+            and (cur_x + 2, cur_y - 1) not in field
+            and (cur_x + 3, cur_y - 1) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "+":
         if (
-            not (cur_x, cur_y - 2) in field
-            and not (cur_x + 1, cur_y - 3) in field
-            and not (cur_x + 2, cur_y - 2) in field
+            (cur_x, cur_y - 2) not in field
+            and (cur_x + 1, cur_y - 3) not in field
+            and (cur_x + 2, cur_y - 2) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "L":
         if (
-            not (cur_x, cur_y - 3) in field
-            and not (cur_x + 1, cur_y - 3) in field
-            and not (cur_x + 2, cur_y - 3) in field
+            (cur_x, cur_y - 3) not in field
+            and (cur_x + 1, cur_y - 3) not in field
+            and (cur_x + 2, cur_y - 3) not in field
         ):
             return True
         else:
             return False
     elif cur_block == "|":
-        if not (cur_x, cur_y - 4) in field:
+        if (cur_x, cur_y - 4) not in field:
             return True
         else:
             return False
     elif cur_block == "o":
-        if not (cur_x, cur_y - 2) in field and not (cur_x + 1, cur_y - 2) in field:
+        if (cur_x, cur_y - 2) in field and not (cur_x + 1, cur_y - 2) not in field:
             return True
         else:
             return False

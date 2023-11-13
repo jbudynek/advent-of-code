@@ -1,7 +1,8 @@
 # coding: utf-8
-import numpy as np
 import re
-from boilerplate import *
+
+import numpy as np
+from boilerplate import read_input_file, run_func, test_func
 
 
 def parse_line(line):
@@ -42,7 +43,7 @@ tt1 = """2-4,6-8
 2-8,3-7
 6-6,4-6
 2-6,4-8"""
-tt1 = tt1.splitlines()
+tt1 = tt1.splitlines()  # type: ignore
 test_func(boom_part1, tt1, 2, True)
 test_func(boom_part2, tt1, 4, True)
 

@@ -1,5 +1,5 @@
 # coding: utf-8
-from boilerplate import *
+from boilerplate import read_input_file, run_func
 
 
 def get_cals_by_elf(input_val):
@@ -26,6 +26,7 @@ def boom_part1(input_val, DBG=True):
 def boom_part2(input_val, DBG=True):
     s_cals = get_cals_by_elf(input_val)
     return sum(s_cals[0:3])
+
 
 puzzle_input = read_input_file("input-d01.txt")
 
