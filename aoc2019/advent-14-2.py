@@ -7,6 +7,7 @@ from collections import defaultdict
 
 import numpy as np
 
+# fmt: off
 puzzle_input = """1 GZJM, 2 CQFGM, 20 SNPQ, 7 RVQG, 3 FBTV, 27 SQLH, 10 HFGCF, 3 ZQCH => 3 SZCN
 4 FCDL, 6 NVPW, 21 GZJM, 1 FBTV, 1 NLSNB, 7 HFGCF, 3 SNPQ => 1 LRPK
 15 FVHTD, 2 HBGFL => 4 BCVLZ
@@ -62,7 +63,7 @@ puzzle_input = """1 GZJM, 2 CQFGM, 20 SNPQ, 7 RVQG, 3 FBTV, 27 SQLH, 10 HFGCF, 3
 1 WZJB => 2 GZJM
 10 ZGZST => 2 LWBQ
 5 TBDH, 19 NXNR, 9 QLHKT, 2 KDJV, 1 SQLH, 1 GWBDR, 6 HFGCF => 4 BWTHK"""  # noqa
-
+# fmt: on
 
 # In[164]:
 
