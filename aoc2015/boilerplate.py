@@ -1,8 +1,11 @@
+import os
 import pickle
 from timeit import default_timer as timer
 
 # Constants
 ##########
+
+CLEAR_SCREEN = "\x1b[2J"
 
 CURSOR_UP_ONE = "\x1b[1A"
 ERASE_LINE = "\x1b[2K"
@@ -22,7 +25,9 @@ DEFAULT_BG = "\x1b[49m"
 
 
 def read_input_file(input_file):
-    f = open(input_file, "r")
+    script_dir = os.path.dirname(__file__)
+    path_to_file = os.path.join(script_dir, input_file)
+    f = open(path_to_file, "r")
     contents = f.read()
     puzzle_input = contents.splitlines()
     f.close()
@@ -91,7 +96,8 @@ def test_func(func, cc=None, expected=None, DBG=False):
 
 def run_func(func, puzzle_input, DBG=False):
     t_start = timer()
-    ret = func(puzzle_input, DBG=False)
+    ret = func(puzzle_input, DBG)
     t_end = timer()
     print_time(t_start, t_end)
     print(ret)
+    return ret
