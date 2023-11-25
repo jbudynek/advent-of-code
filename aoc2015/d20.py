@@ -8,13 +8,13 @@ from boilerplate import run_func
 
 def run(input_val, nb_per_house, max_delivery, DBG=True):
     n = int(input_val)
-    n_over_ten = n // nb_per_house
+    nb_max_houses = n // nb_per_house
 
-    all_houses = np.zeros(n_over_ten + 1)
+    all_houses = np.zeros(nb_max_houses + 1)
 
-    for idx in range(1, n_over_ten + 1):
+    for idx in range(1, nb_max_houses + 1):
         k = 0
-        for jdx in range(idx, n_over_ten + 1, idx):
+        for jdx in range(idx, nb_max_houses + 1, idx):
             k += 1
             all_houses[jdx] += idx * nb_per_house
             if k == max_delivery:
