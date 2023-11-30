@@ -76,7 +76,7 @@ test_func(boom_part2, tt1, 281, True)
 # Real data
 ############
 
-puzzle_input = read_input_file("input.txt")
+puzzle_input = read_input_file("input-d01.txt")
 
 # part 1
 
