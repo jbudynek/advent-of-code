@@ -45,7 +45,7 @@ def parse_int_on_line(z, engine):
 # Return a list of tuples: (symbol, list of integers around)
 # to be processed in the caller function.
 def scan_engine(engine, DBG):
-    dirs8 = [complex(1, 1) ** (i) / 2 ** (i // 2) for i in range(8)]
+    dirs8 = [complex(1, 1) ** i / 2 ** (i // 2) for i in range(8)]
     symbols_and_values = []
     for z, val in engine.items():
         if not isinstance(val, int):
