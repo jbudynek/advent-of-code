@@ -5,7 +5,7 @@ from shapely.geometry import Point, Polygon
 
 
 def parse_world_complex(ipt, DBG=True):
-    field = {}  # defaultdict(str)
+    field = {}
     x = -1
     y = -1
     for line in ipt:
