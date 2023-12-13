@@ -93,8 +93,6 @@ def boom_part1(ipt, DBG=True):
     patterns = parse_patterns(ipt)
     for pattern in patterns:
         id_xs, id_ys = find_symmetry(pattern)
-        if len(id_xs) > 1 or len(id_ys) > 1:
-            print(id_xs, id_ys)
         id_x, id_y = 0, 0
         if len(id_xs) > 0:
             id_x = id_xs[0]
@@ -109,6 +107,8 @@ def boom_part2(ipt, DBG=True):
     patterns = parse_patterns(ipt)
     for pattern in patterns:
         id_xs, id_ys = find_symmetry(pattern)
+        if DBG and (len(id_xs) > 1 or len(id_ys) > 1):
+            print(id_xs, id_ys)
         nid_x, nid_y = find_other_symmetry(pattern, id_xs, id_ys)
         ret += nid_x + (100 * nid_y)
     return ret
