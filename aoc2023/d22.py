@@ -6,28 +6,29 @@ from boilerplate import read_input_file, run_func, test_func
 
 # Algorithm:
 # store 2 dicts:
-# brick id to (xyz) position (changes)
+# brick id to (xyz) position (this changes)
 # brick id to (dx dy dz) size (this does not change)
-# and store the world: map (xyz) to brick id
+# and store the world: map (xyz) to brick id - this is sparse (hopefully)
 
-# to fall, here is how you do it:
-# sort the brick ids by position of the brick  (see np.argsort it's great)
+# to fall, here is how you do it (the tetris part):
+# sort the brick ids by z position of the brick (see np.argsort it's great)
 # (from lowest - closest to z=1 - to highest)
 # iterate in that order over bricks
 # test if there is free space below
 # if yes, move it down and re-sort the ids since positions have changed
 # when there is no free space left, restart at lowest brick
-# when you hit the last (highest) brick and it cannot move, you're donne
+# when you hit the last (highest) brick and it cannot move, you're done
 
-# then you want to test what happens when you remove one brick
+# then you want to see what happens when you remove one brick (the djenga part)
 # iterate on bricks (order doesn't matter)
 # copy your world and maps, remove the brick
 # (in practice you move it below z=0 in its entirety)
 # test if any other brick has space below
-# if yes, for part 1 you just have to remember that
-# if yes, for part 2 you need to run the falling algo described earlier
+# if yes:
+# for part 1 you just have to remember that
+# part 2 you need to run the falling algo described earlier
 # and store the id of bricks that move (put them in a set)
-# takes a little while but works fine.
+# takes a little while, works fine.
 
 
 def parse_ipt(ipt):
