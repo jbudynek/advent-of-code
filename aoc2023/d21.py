@@ -15,13 +15,8 @@ def print_field_complex(field, x_min, x_max, y_min, y_max):
         print(ss)
 
 
-# Main function
-################
-
-
 def parse_world(ccc, DBG=True):
     x_min, x_max, y_min, y_max = 0, len(ccc[0]), 0, len(ccc)
-    start = 0 + 0j
     field = {}
     x = -1
     y = -1
@@ -34,15 +29,10 @@ def parse_world(ccc, DBG=True):
                 field[complex(x, y)] = c
             elif c == "S":
                 field[complex(x, y)] = c
-                start = complex(x, y)
 
     if DBG:
         print(field)
-
-    # 4 neighbors
-    dirs = [complex(0, 1) ** i for i in range(4)]
-
-    return field, start, x_min, x_max, y_min, y_max, dirs
+    return field, x_min, x_max, y_min, y_max
 
 
 def count(field):
@@ -50,20 +40,7 @@ def count(field):
     return sum(plots)
 
 
-def step(field):
-    dirs = [complex(0, 1) ** i for i in range(4)]
-    field2 = field.copy()
-    for k, v in field.items():
-        if v == "O" or v == "S":
-            for d in dirs:
-                nk = k + d
-                if nk not in field:
-                    field2[nk] = "O"
-            del field2[k]
-    return field2
-
-
-def step_(field, x_max, y_max):
+def step(field, x_max, y_max):
     dirs = [complex(0, 1) ** i for i in range(4)]
     field2 = field.copy()
     for k, v in field.items():
@@ -80,7 +57,7 @@ def step_(field, x_max, y_max):
 
 
 def boom_part1(ipt, DBG=True):
-    field, _, x_min, x_max, y_min, y_max, _ = parse_world(ipt, DBG)
+    field, x_min, x_max, y_min, y_max = parse_world(ipt, DBG)
 
     max_step = 6 if DBG else 64
     nb_step = 0
@@ -92,7 +69,7 @@ def boom_part1(ipt, DBG=True):
     while True:
         if nb_step == max_step:
             return count(field)
-        field = step(field)
+        field = step(field, x_max, y_max)
         nb_step += 1
         if DBG:
             print("step", nb_step)
@@ -100,7 +77,7 @@ def boom_part1(ipt, DBG=True):
 
 
 def boom_part2(ipt, DBG=True):
-    field, _, x_min, x_max, y_min, y_max, _ = parse_world(ipt, DBG)
+    field, x_min, x_max, y_min, y_max = parse_world(ipt, DBG)
 
     max_step = x_max // 2 + 2 * x_max + 1
     nb_step = 0
@@ -112,7 +89,7 @@ def boom_part2(ipt, DBG=True):
     xx = []
     yy = []
     while nb_step < max_step:
-        field = step_(field, x_max, y_max)
+        field = step(field, x_max, y_max)
         nb_step += 1
         if nb_step in [x_max // 2, x_max // 2 + x_max, x_max // 2 + 2 * x_max]:
             if DBG:
@@ -122,13 +99,19 @@ def boom_part2(ipt, DBG=True):
         if DBG and nb_step in [6, 10, 50]:
             print("step", nb_step, count(field))
 
+    # the map is periodical in space, and there are straight paths from
+    # the center to the borders. So the number of tiles should also be
+    # interesting to look at when
+    # n_steps is equal to x_max (131), modulo x_max//2 (65)
+    # we are in 2D plane so we suspect a quadratic relationship
     # n = a*x^2 + b*x + c where n = nb_tiles, x = nb_steps
-    # use Lagrange interpolation to fit a polynomial to the values
+    # use Lagrange interpolation to fit a polynomial to three values
     # for steps = (x_max//2) (x_max//2 + x_max) (x_max//2 + 2 * x_max)
-    # 26501365 is of this form (xmax//2 + N * xmax)
+    # note 26501365 is also of this form (xmax//2 + N * xmax)
     # *step 65 3797
     # *step 196 34009
     # *step 327 94353
+
     poly = lagrange(xx, yy)
 
     return int(np.ceil(poly(26501365)))
@@ -151,7 +134,6 @@ ipt_test1 = """...........
 ...........""".splitlines()
 test_func(boom_part1, ipt_test1, 16, True)
 test_func(boom_part2, ipt_test1, 528192700299084, True)
-# quit()
 
 # Real data
 ############
