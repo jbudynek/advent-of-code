@@ -2,6 +2,10 @@
 
 Usual disclaimer: the code gets the job done. It's raw and mostly inelegant!
 
+## 2024
+
+More Python!
+
 ## 2023
 
 ...Python again!
