@@ -1,50 +1,38 @@
-# coding: utf-8
-import numpy as np
-from boilerplate import read_input_file, run_func, test_func
+with open("input.txt", "r") as file:
+    ipt_puzzle = file.read()
 
+ipt_test = """3   4
+4   3
+2   5
+1   3
+3   9
+3   3"""
 
-def strings_to_int_array(ii):
-    ii = ii.split(",")
-    ii = np.asarray(ii, dtype=int)
-    return ii
+# ipt=ipt_test
+ipt = ipt_puzzle
 
+lines = [li for li in ipt.split("\n")]
 
-def boom_part1(ipt, DBG=True):
-    ia = strings_to_int_array(ipt[0])
-    return np.sum(ia)
+l1 = []
+l2 = []
+for li in lines:
+    if li == "":
+        continue
+    [e1, e2] = li.split()
+    l1.append(int(e1))
+    l2.append(int(e2))
 
+l1 = sorted(l1)
+l2 = sorted(l2)
 
-def boom_part2(ipt, DBG=True):
-    return -1
+r1 = [abs(e2 - e1) for (e1, e2) in zip(l1, l2)]
+r2 = [e1 * l2.count(e1) for (e1, e2) in zip(l1, l2)]
 
+result1 = sum(r1)
+result2 = sum(r2)
 
-# Test cases
-#############
-
-
-ipt_test1 = "3,4,3,1,2".splitlines()
-test_func(boom_part1, ipt_test1, 13, True)
-test_func(boom_part2, ipt_test1, -1, True)
-
-# Real data
-############
-
-ipt_puzzle = read_input_file("input.txt")
-
-# part 1
-
-result1 = run_func(boom_part1, ipt_puzzle, DBG=False)
-
-# part 2
-
-result2 = run_func(boom_part2, ipt_puzzle, DBG=False)
-
-
-print("******")
 print(f"# Part 1 solution: {result1}")
 print(f"# Part 2 solution: {result2}")
 
-quit()
-
-# Part 1 solution:
-# Part 2 solution:
+# Part 1 solution: 2375403
+# Part 2 solution: 23082277
