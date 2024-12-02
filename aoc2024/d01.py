@@ -1,4 +1,4 @@
-with open("input.txt", "r") as file:
+with open("input-d01.txt", "r") as file:
     ipt_puzzle = file.read()
 
 ipt_test = """3   4
