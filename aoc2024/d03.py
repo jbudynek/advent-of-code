@@ -6,26 +6,19 @@ ipt = open("input.txt").read()
 
 muls = re.findall(r"(mul\(\d+,\d+\))|(do\(\))|(don\'t\(\))", ipt)
 
-do = True
-
-out1 = []
-out2 = []
-for m in muls:
-    if m[2] == "don't()":
-        do = False
-    elif m[1] == "do()":
-        do = True
+factor = 1
+products, factors = [], []
+for mul, do, dont in muls:
+    if dont == "don't()" or do == "do()":
+        factor = 1 - factor
     else:
-        ii = list(map(int, re.findall(r"-?\d+", m[0])))
-        out1.append(ii[0] * ii[1])
-        if do:
-            out2.append(ii[0] * ii[1])
+        ii = list(map(int, re.findall(r"-?\d+", mul)))
+        products.append(ii[0] * ii[1])
+        factors.append(factor)
 
-result1 = sum(out1)
-result2 = sum(out2)
+print(f"# Part 1 solution: {sum(products)}")
+print(f"# Part 2 solution: {sum([p * f for p, f in zip(products, factors)])}")
 
-print(f"# Part 1 solution: {result1}")
-print(f"# Part 2 solution: {result2}")
 
 # Part 1 solution: 190604937
 # Part 2 solution: 82857512
