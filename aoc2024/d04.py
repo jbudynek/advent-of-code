@@ -1,3 +1,15 @@
+# we read the input into a complex plane, which is a dict of characters indexed
+# by complex numbers. This is the world. We prepare an array of eight complex
+# numbers to get to the neighbors of a particular location.
+# (note the one-liner for dzs)
+# Part 1: iterate on keys of the world (each point in the complex plane).
+# If it's an 'X', we look straight in the eight directions to see if 'XMAS' is
+# written.
+# Part 2: prepare a subset of the directions that goes only in the 4 corners.
+# Iterate on keys of the world, if it's an 'A', look in the corners to see if
+# we have 'MAS' or 'SAM'.
+
+
 ipt_test = """MMMSXXMASM
 MSAMXMSMSA
 AMXSXMAAMM
