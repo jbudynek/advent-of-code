@@ -23,8 +23,8 @@ def create_world_complex(lines):
             x += 1
             world[complex(x, y)] = c
     # 8 neighbors
-    dz = [complex(1, 1) ** i / 2 ** (i // 2) for i in range(8)]
-    return world, dz
+    dzs = [complex(1, 1) ** i / 2 ** (i // 2) for i in range(8)]
+    return world, dzs
 
 
 world, dzs = create_world_complex(ipt)
