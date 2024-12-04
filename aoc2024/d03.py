@@ -1,3 +1,10 @@
+# We use a 3-parts regular expression with capturing groups to get all 'mul's,
+# 'do's and 'dont's. Then we iterate on them and store the results of the
+# multiplications.
+# A trick is to store a multiplying factor (which can be 0 or 1, and is
+# switched (by using 1-x) every time we encounter a 'do' or a 'dont') to
+# compute the second result.
+
 import re
 
 # ipt="""xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"""
@@ -9,7 +16,7 @@ muls = re.findall(r"(mul\(\d+,\d+\))|(do\(\))|(don\'t\(\))", ipt)
 factor = 1
 products, factors = [], []
 for mul, do, dont in muls:
-    if dont == "don't()" or do == "do()":
+    if dont != "" or do != "":
         factor = 1 - factor
     else:
         ii = list(map(int, re.findall(r"-?\d+", mul)))
