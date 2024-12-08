@@ -65,11 +65,10 @@ result1 = len(path)
 print(f"# Part 1 solution: {result1}")
 
 for key in path:
-    if world[key] == ".":
-        world2 = world.copy()
-        world2[key] = "#"
-        if walk_patrol(world2)[1]:
-            result2 += 1
+    world2 = world.copy()
+    world2[key] = "#"
+    if walk_patrol(world2)[1]:
+        result2 += 1
 
 print(f"# Part 2 solution: {result2}")
 
