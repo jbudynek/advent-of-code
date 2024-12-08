@@ -3,8 +3,9 @@
 # We remember each visited point (in a set) to answer part 1 (size of the set).
 # We also remember each tuple (visited, direction) to see if we walked the place
 # before with the same direction, in which case it's a loop (part 2)
-# Part 1 is just one walk, and for part 2 we used brute force and tried to put
-# an obstacle in each empty spot. It takes time but it works :P
+# Part 1 is just one walk, and for part 2 we used "almost brute force" and
+# tried to put an obstacle in each spot traveled by the guard in part 1.
+# It takes a bit of time but it works :P
 
 ipt = """....#.....
 .........#
@@ -46,24 +47,24 @@ def walk_patrol(w):
             if w[next_z] == "#":
                 guard_dz_idx = (guard_dz_idx + 1) % 4
                 if (guard_z, guard_dz_idx) in visited_with_dir:
-                    return (len(visited), True)
+                    return (visited, True)
                 visited_with_dir.add((guard_z, guard_dz_idx))
             else:
                 guard_z = next_z
                 if (guard_z, guard_dz_idx) in visited_with_dir:
-                    return (len(visited), True)
+                    return (visited, True)
                 visited_with_dir.add((guard_z, guard_dz_idx))
                 visited.add(next_z)
-    return (len(visited), False)
+    return (visited, False)
 
 
 result1, result2 = 0, 0
-
-result1 = walk_patrol(world)[0]
+path, _ = walk_patrol(world)
+result1 = len(path)
 
 print(f"# Part 1 solution: {result1}")
 
-for key in world:
+for key in path:
     if world[key] == ".":
         world2 = world.copy()
         world2[key] = "#"
