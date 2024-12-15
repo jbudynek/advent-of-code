@@ -36,7 +36,7 @@ def print_field_complex(field, z_robot, x_min, x_max, y_min, y_max):
         for xx in range(x_min, x_max + 1):
             z = complex(xx, yy)
             if z in field:
-                ss += str(field[complex(xx, yy)])
+                ss += str(field[z])
             elif z == z_robot:
                 ss += "@"
             else:
