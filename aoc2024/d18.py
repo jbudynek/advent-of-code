@@ -92,4 +92,4 @@ print(f"# Part 1 solution: {r1}")
 print(f"# Part 2 solution: {r2}")
 
 # Part 1 solution: 408
-# Part 2 solution: 0
+# Part 2 solution: 45,16
