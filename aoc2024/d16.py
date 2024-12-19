@@ -55,19 +55,6 @@ for y, line in enumerate(ipt):
             www[(x, y)] = c
 
 
-def print_field_complex(field, path, x_min, x_max, y_min, y_max):
-    for yy in range(y_min, y_max):
-        ss = ""
-        for xx in range(x_min, x_max):
-            if (xx, yy) in path:
-                ss += "O"
-            elif (xx, yy) in field:
-                ss += str(field[(xx, yy)])
-            else:
-                ss += "#"
-        print(ss)
-
-
 def dot_product(x, y, xx, yy):
     return x * xx + y * yy
 
@@ -80,8 +67,6 @@ def dijkstra_pos_dir_path(start_node, end_node, start_dir, field):
     while len(queue) > 0:
         (shortest_path_len, (x, y), (dx, dy), path_so_far_0) = heapq.heappop(queue)
         if (x, y) == end_node:
-            # print(shortest_path_len)
-            # print_field_complex(field, path_so_far_0, 0, max_x, 0, max_y)
             return (x, y), (dx, dy), shortest_path_len
 
         if ((x, y), (dx, dy)) in visited_nodes_states:
@@ -114,7 +99,7 @@ def dijkstra_pos_dir_path(start_node, end_node, start_dir, field):
 
 _, _, r1 = dijkstra_pos_dir_path(start, end, (1, 0), www)
 
-
+# this part is quite long, it could be made faster using a cache somewhere.
 all_nodes = set()
 for k in www.keys():
     pos_e, dir_e, len_path_1 = dijkstra_pos_dir_path(start, k, (1, 0), www)
