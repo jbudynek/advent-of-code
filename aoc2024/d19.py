@@ -61,8 +61,6 @@ def count_possible_ways(pattern):
 
 r2 = sum([count_possible_ways(line) for line in lines])
 
-print(r1)
-print(r2)
 print(f"# Part 1 solution: {r1}")
 print(f"# Part 2 solution: {r2}")
 
