@@ -81,7 +81,6 @@ def boom(min_manhattan_dist, max_manhattan_dist):
                     if new_saving not in best_savings:
                         best_savings[new_saving] = set()
                     best_savings[new_saving].add((z0, z1))
-    # print([(len(best_savings[k]),k) for k in sorted(best_savings.keys())])
     return best_savings
 
 
