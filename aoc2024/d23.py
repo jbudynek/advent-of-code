@@ -40,13 +40,14 @@ ipt = ipt_1_7
 ipt = open("input-d23.txt").read().strip().split("\n")
 
 net = nx.Graph()
+
 for ll in ipt:
     nodes = ll.split("-")
     net.add_edge(nodes[0], nodes[1])
 
 
-# p1
-
+# part 1: use networkx.enumerate_all_cliques(net), it returns all cliques
+# (group of n interconnected nodes), sorted by size.
 r1 = 0
 clic_clic = list(nx.enumerate_all_cliques(net))
 for clique in clic_clic:
@@ -56,7 +57,7 @@ for clique in clic_clic:
                 r1 += 1
                 break
 
-# p2
+# part 2: the last clique of the list is the largest
 all_nodes_in_biggest_clique = set(clic_clic[-1])
 
 r2 = ",".join(sorted(list(all_nodes_in_biggest_clique)))
