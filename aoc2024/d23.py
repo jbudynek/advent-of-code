@@ -57,10 +57,7 @@ for clique in clic_clic:
                 break
 
 # p2
-all_nodes_in_biggest_clique = set()
-biggest_clique = clic_clic[-1]
-for node in biggest_clique:
-    all_nodes_in_biggest_clique.add(node)
+all_nodes_in_biggest_clique = set(clic_clic[-1])
 
 r2 = ",".join(sorted(list(all_nodes_in_biggest_clique)))
 
