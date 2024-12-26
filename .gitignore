@@ -142,3 +142,4 @@ tmp/
 *.gif
 *.png
 input*.txt
+*pdf
