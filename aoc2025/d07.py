@@ -34,7 +34,7 @@ for y, line in enumerate(ipt):
 
 # we can do both parts at the same time.
 # use dynamic programming for part 2
-# and remember splits we see, in a set
+# and remember splits we see, in a set, for part 1
 
 SET_SPLITS = set()
 CACHE = {}
