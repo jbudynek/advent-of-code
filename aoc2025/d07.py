@@ -52,9 +52,14 @@ def count_ways(y, x):
             return 1
     # count split for part 1
     SET_SPLITS.add((x, y))
-    CACHE[(y + 1, x - 1)] = count_ways(y + 1, x - 1)
-    CACHE[(y + 1, x + 1)] = count_ways(y + 1, x + 1)
-    return CACHE[(y + 1, x - 1)] + CACHE[(y + 1, x + 1)]
+    # count left and right
+    lhs = count_ways(y + 1, x - 1)
+    CACHE[(y + 1, x - 1)] = lhs
+    rhs = count_ways(y + 1, x + 1)
+    CACHE[(y + 1, x + 1)] = rhs
+    ret = lhs + rhs
+    CACHE[(y, x)] = ret
+    return ret
 
 
 res2 = count_ways(0, max_x // 2)
