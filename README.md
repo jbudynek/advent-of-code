@@ -1,6 +1,6 @@
 # Advent of code
 
-November 2025: I jumped the shark and wrote `AOC_WORKFLOW.md` to guide Claude. It was fun to write it, but now where has all the fun gone?
+November 2026: I jumped the shark and wrote `AOC_WORKFLOW.md` to guide Claude. It was fun to write it, but now where has all the fun gone?
 
 Usual disclaimer: the code gets the job done. It's raw and mostly inelegant! (When written by me)
 
