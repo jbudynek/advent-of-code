@@ -143,3 +143,4 @@ tmp/
 *.png
 input*.txt
 *pdf
+puzzle_*.txt
