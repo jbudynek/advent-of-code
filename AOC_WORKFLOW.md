@@ -41,3 +41,7 @@ All three read `SESSION_TOKEN` from `tools/.env` and write their output in the c
    # Part 1 solution: <answer>
    # Part 2 solution: <answer>
    ```
+   If part 2 takes longer than 5 seconds, also add timing around it (see `tools/timing.py`) and append a third comment:
+   ```
+   # Part 2 duration: <duration>
+   ```
