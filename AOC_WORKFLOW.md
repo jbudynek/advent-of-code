@@ -1,8 +1,8 @@
 # Advent of Code workflow (any year, any day)
 
 Replace `YYYY` and `D` below. All commands run from the year folder `aocYYYY/`.
-Tools (same folder): `dl.py` (input), `dl_puzzle.py` (puzzle text), `submit.py` (answers).
-All three read `SESSION_TOKEN` from `.env`.
+Tools live in `tools/` (repo root): `dl.py` (input), `dl_puzzle.py` (puzzle text), `submit.py` (answers).
+All three read `SESSION_TOKEN` from `tools/.env` and write their output in the current directory.
 
 ## Rules
 
@@ -16,12 +16,12 @@ All three read `SESSION_TOKEN` from `.env`.
 
 ## Steps
 
-0. **Check tools.** Make sure `dl.py`, `dl_puzzle.py` and `submit.py` exist in `aocYYYY/`
-   (copy them from `aoc2017/` if missing). `.env` must contain `SESSION_TOKEN`.
+0. **Check tools.** Make sure `tools/` has `dl.py`, `dl_puzzle.py` and `submit.py`;
+   `tools/.env` must contain `SESSION_TOKEN`. Create `aocYYYY/` if missing.
 1. **Download the input** (overwrites `aocYYYY/input.txt`, which is gitignored):
-   `cd aocYYYY && python dl.py YYYY D`
+   `cd aocYYYY && python ../tools/dl.py YYYY D`
 2. **Download part 1 text** (saved to `puzzle_YYYY_D_1.txt`, gitignored):
-   `python dl_puzzle.py YYYY D 1`, then read it.
+   `python ../tools/dl_puzzle.py YYYY D 1`, then read it.
 3. **Write `dD.py`** (zero-padded, e.g. `d07.py`) with:
    - a header comment: "Algorithm (code written by Claude, an AI assistant made by Anthropic)",
      in English, explaining the big idea;
@@ -30,12 +30,12 @@ All three read `SESSION_TOKEN` from `.env`.
    - asserts on the example's expected answers, before touching the real input.
 4. **Run it** (`python dD.py`), fix until the tests pass, then show the part 1 answer
    and explain the big idea.
-5. **Submit part 1:** `python submit.py YYYY D 1 <answer>`.
+5. **Submit part 1:** `python ../tools/submit.py YYYY D 1 <answer>`.
    If not CORRECT: tell the user and stop.
-6. **Download part 2 text:** `python dl_puzzle.py YYYY D 2`, then read it.
+6. **Download part 2 text:** `python ../tools/dl_puzzle.py YYYY D 2`, then read it.
 7. **Extend `dD.py`:** add part 2 solution and example test, update the header
    with part 2's big idea, run it, show the answer and explain the big idea.
-8. **Submit part 2:** `python submit.py YYYY D 2 <answer>`, report the result.
+8. **Submit part 2:** `python ../tools/submit.py YYYY D 2 <answer>`, report the result.
 9. **Finish:** append the results as comments at the end of `dD.py`:
    ```
    # Part 1 solution: <answer>

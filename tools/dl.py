@@ -20,7 +20,7 @@ url = f"https://adventofcode.com/{y}/day/{d}/input"
 response = requests.get(url, cookies={"session": session_token})
 
 if response.status_code == 200:
-    script_dir = os.path.dirname(__file__)
+    script_dir = os.getcwd()  # run from the year folder
     path_to_file = os.path.join(script_dir, "input.txt")
 
     with open(path_to_file, "w") as f:

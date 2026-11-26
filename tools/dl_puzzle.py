@@ -6,9 +6,9 @@ import requests  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 from dotenv import load_dotenv
 
-# Usage: python dl_puzzle.py [year] [day] [part]
+# Usage: python ../tools/dl_puzzle.py [year] [day] [part]
 # Downloads the text of one puzzle part (using SESSION_TOKEN from .env)
-# and saves it to puzzle_<year>_<day>_<part>.txt next to this script.
+# and saves it to puzzle_<year>_<day>_<part>.txt in the current directory (run it from the year folder).
 
 load_dotenv()
 session_token = os.getenv("SESSION_TOKEN")
@@ -50,7 +50,7 @@ for el in articles[part - 1].find_all(["h2", "p", "pre", "ul", "ol"], recursive=
         blocks.append(el.get_text().rstrip("\n"))
 text = "\n\n".join(blocks) + "\n"
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
+script_dir = os.getcwd()  # run from the year folder
 path_to_file = os.path.join(script_dir, f"puzzle_{y}_{d}_{part}.txt")
 with open(path_to_file, "w") as f:
     f.write(text)

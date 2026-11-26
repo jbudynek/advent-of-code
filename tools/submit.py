@@ -7,8 +7,8 @@ from bs4 import BeautifulSoup  # type: ignore
 from dotenv import load_dotenv
 
 # Usage:
-#   python submit.py <part> <answer>                 (year and day = today)
-#   python submit.py <year> <day> <part> <answer>
+#   python ../tools/submit.py <part> <answer>                 (year and day = today)
+#   python ../tools/submit.py <year> <day> <part> <answer>
 # Submits the answer (using SESSION_TOKEN from .env) and prints the verdict.
 # Warning: no confirmation, and wrong answers trigger a cooldown on the site.
 
