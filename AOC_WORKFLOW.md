@@ -41,7 +41,7 @@ All three read `SESSION_TOKEN` from `tools/.env` and write their output in the c
 7. **Extend `dD.py`:** add part 2 solution and example test, update the header
    with part 2's big idea, run it, show the answer and explain the big idea.
 8. **Submit part 2:** `conda run -n <ENV> python ../tools/submit.py YYYY D 2 <answer>`, report the result.
-9. **Finish:** append the results as comments at the end of `dD.py`:
+9. **Finish:** append the results as comments at the very end of `dD.py`:
    ```
    # Part 1 solution: <answer>
    # Part 2 solution: <answer>
